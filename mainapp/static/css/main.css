@@ -1,146 +1,185 @@
-body
-{
-	padding-top: 70px;
-	font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif
-}
+/* ------------------------- Main Frame ------------------------------------*/
 /*
-.classmates-navbar
-{
-	text-shadow: 0 -1px 0 rgba(0,0,0,.15);
-  	background-color: #418bca;
-  	border-color: #3885c7;
-  	box-shadow: 0 1px 0 rgba(255,255,255,.1);
-  	color: #ffffff;
-}
-*/
+file:
+    base.html
+    base_normal.html
 
+feature:
+    fixed navbar
+    bottom footer
+*/
+html,
+body {
+    height: 100%;
+    font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+.header-content-wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -50px;
+}
+
+/* Set the fixed height of the footer here */
+.push,
+.footer {
+    height: 50px;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    .footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+.header-content-wrap > .container {
+    padding-top: 60px;
+}
+
+/* -------------- Custom Navbar --------------------- */
 .classmates-navbar {
-  text-shadow: 0 -1px 0 rgba(0,0,0,.15);
-  background-color: #418bca;
-  border-color: #3885c7;
-  box-shadow: 0 1px 0 rgba(255,255,255,.1);
+    text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+    background-color: #418bca;
+    border-color: #3885c7;
+    box-shadow: 0 1px 0 rgba(255,255,255,.1);
 }
 .classmates-navbar .navbar-collapse {
-  border-color: #3885c7;
+    border-color: #3885c7;
 }
 .classmates-navbar .navbar-brand {
-  color: #fff;
+    color: #fff;
 }
 .classmates-navbar .navbar-nav > li > a {
-  color: #cdbfe3;
+    color: #cdbfe3;
 }
 .classmates-navbar .navbar-nav > li > a:hover {
-  color: #fff;
+    color: #fff;
 }
 .classmates-navbar .navbar-nav > .active > a,
 .classmates-navbar .navbar-nav > .active > a:hover {
-  color: #fff;
-  background-color: #3885c7;
+    color: #fff;
+    background-color: #3885c7;
 }
 .classmates-navbar .navbar-toggle {
-  border-color: #418bca;
+    border-color: #418bca;
 }
 .classmates-navbar .navbar-toggle:hover {
-  background-color: #3885c7;
-  border-color: #3885c7;
-}
-
-.bs-docs-sidebar
-{
-  margin-top: 70px;
-  text-align: center;
+    background-color: #3885c7;
+    border-color: #3885c7;
 }
 
 /* Sidenav for Docs
 -------------------------------------------------- */
+.bs-docs-sidebar
+{
+    margin-top: 70px;
+    text-align: center;
+}
 
 .main-sidenav {
-  background-color: #fff;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-          box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
 }
 
 .main-sidenav > li a
 {
-  position: relative;
-  display: block;
-  padding: 5px 15px;
-  text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 5px 15px;
+    text-decoration: none;
 }
 .main-sidenav > li a:hover,
 .main-sidenav > li a:focus {
-  text-decoration: none;
-  background-color: #eeeeee;
+    text-decoration: none;
+    background-color: #eeeeee;
 }
 
 .main-sidenav > li >div
 {
-  border:1px solid #e5e5e5;
-  margin: 0px 0px;
+    border:1px solid #e5e5e5;
+    margin: 0px 0px;
 }
 .main-sidenav >li:first-child >div
 {
-  -webkit-border-radius: 6px 6px 0 0;
-     -moz-border-radius: 6px 6px 0 0;
-          border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
 
 }
 .main-sidenav >li:last-child >div
 {
-  -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
 }
 
 .delete-ok-style
 {
-  width: 70%;
+    width: 70%;
 }
 
 .btn-ctl-display
 {
-  display: none;
+    display: none;
 }
 
-.testcss
-{
-  height: 1200px;
-}
 .infohead
 {
-  margin-top: 30px;
+    margin-top: 30px;
 }
 .infotitle
 {
-  padding:5px 20px;
-  font-size: 20px;
-  color: #418bca;
+    padding:5px 20px;
+    font-size: 20px;
+    color: #418bca;
 }
 .infomenu
 {
-  text-align: right;
+    text-align: right;
 }
 .infotable
 {
-  margin-top: 10px;
-  width: 100%;
-  border:1px solid #e5e5e5;
-  text-align: center;
+    margin-top: 10px;
+    width: 100%;
+    border:1px solid #e5e5e5;
+    text-align: center;
 }
 .infotable td
 {
-  border:1px solid #e5e5e5; 
-  height: 30px;
+    border:1px solid #e5e5e5;
+    height: 30px;
 }
 
 .infotable input
 {
-  border: none;
-  text-align: center;
-  height: 100%;
-  width: 100%;
+    border: none;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.footer-text
+{
+    padding:5px 20px;
+}
+
+.footer-img
+{
+     text-align: right;
 }

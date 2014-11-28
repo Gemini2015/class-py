@@ -1,157 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+{% extends 'include/base_normal.html' %}
+{% load i18n %}
+{% load staticfiles %}
 
-    <title>Classmates</title>
-
-    <!-- Bootstrap Ver.3 -->
-    <!-- Bootstrap core CSS -->
-    {% load staticfiles %}
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    
-    <!-- Custom styles for this template -->
-    {% load staticfiles %}
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top classmates-navbar">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/index">ClassMates</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="/index">Home</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                
-                <li><a href="/password">Password</a></li>
-                <!-- <li><a href="#">Something else here</a></li> -->
-              </ul>
-            </li>
-            {% if currentUser.role == 'A' %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">User<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/newuser">New</a></li>
-                <li><a href="#" id="deluser">Delete</a></li>
-                <!-- <li><a href="#">Something else here</a></li> -->
-              </ul>
-            </li>
-            {% endif %}
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-            <input type="hidden" id="userId" name="userId" value="{{ currentUser.id }}" /> 
-            <li><a href="/index">{{ currentUser.account }}</a></li>
-            <li><a href="/logout">Logout</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+{% block content %}
 
     <div class="container">
-
-      <!-- Main component for a primary marketing message or call to action -->
-      
-      <div class="row">
-        <div class="col-lg-3">
-          <div class="bs-docs-sidebar">
-            <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-            <hr class="btn-ctl-display">
-            <ul id="userList" class="nav nav-list main-sidenav">
-              {% for user in userList %}
-              <li>
-                <div class="row list-item">
-                  <div class="col-lg-9">
-                    <a href="/info/{{ user.id }}">{{ user.cname }}</a>
-                  </div>
-                  <div class="col-lg-3 btn-ctl-display">
-                    {% if user.id != currentUser.id %}
-                    <button class="btn btn-sm btn-ctl-display" onclick="DeleteUser({{ user.id }})"><span class="glyphicon glyphicon-remove"></span></button>
-                    {% endif %}
-                  </div>
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="bs-docs-sidebar">
+                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
+                    <hr class="btn-ctl-display">
+                    <ul id="infolist" class="nav nav-list main-sidenav">
+                        {% for p in infolist %}
+                            <li id="{{ p.user.id }}">
+                                <div class="row list-item">
+                                    <div class="col-lg-9">
+                                        <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
+                                    </div>
+                                    <div class="col-lg-3 btn-ctl-display">
+                                        {% if p.user != user and not p.user.is_superuser %}
+                                            <button class="btn btn-sm btn-ctl-display" onclick="DeleteUser({{ p.user.id }})"><span class="glyphicon glyphicon-remove"></span></button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
+            </div>
 
-    <div class="col-lg-9 testcss">
-        <div class="row infohead">
-          <div class="col-lg-10 infotitle">Infomation</div>
-          <div class="col-lg-2 infomenu">
-            {% if currentUser.id == info.user.id or currentUser.role == 'A' %}
-            <button class="btn" onclick="location='/editinfo/{{ info.user.id }}'">Edit</button>
-            {% endif %}
-          </div>
+            <div class="col-lg-9">
+                <div class="row infohead">
+                    <div class="col-lg-10 infotitle">Infomation</div>
+                    <div class="col-lg-2 infomenu">
+                        {% if user == info.user or user.is_staff %}
+                            <button class="btn btn-sm btn-primary" onclick="location='/editinfo/{{ info.user.id }}'">Edit</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover infotable">
+                    <tr>
+                        <td>Name</td>
+                        <td colspan="3" >{{ info.cname }}</td>
+                    </tr>
+                    <tr>
+                        <td>English Name</td>
+                        <td>{{ info.ename }}</td>
+                        <td>Birthday</td>
+                        <td>{{ info.birthday|date:"Y-m-d" }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sex</td>
+                        {% for key, value in SEX_TYPE.items %}
+                            {% if key == info.sex %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>BloodType</td>
+                        {% for key, value in BLOOD_TYPE.items %}
+                            {% if key == info.bloodtype %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>CellPhone</td>
+                        <td>{{ info.cellphone }}</td>
+                        <td>Email</td>
+                        <td>{{ info.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>MailBox</td>
+                        <td colspan="3">{{ info.mailbox }}</td>
+                    </tr>
+                    <tr>
+                        <td>Home Address</td>
+                        <td colspan="3">{{ info.homeaddr }}</td>
+                    </tr>
+                    <tr>
+                        <td>Current Address</td>
+                        <td colspan="3">{{ info.currentaddr }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <table class="table table-bordered table-hover infotable">
-          <tr>
-            <td>Name</td>
-            <td colspan="3" >{{ info.user.cname }}</td>
-          </tr>
-          <tr>
-            <td>English Name</td>
-            <td>{{ info.ename }}</td>
-            <td>Birthday</td>
-            <td>{{ info.birthday|date:"Y-m-d" }}</td>
-          </tr>
-          <tr>
-            <td>Sex</td>
-            <td>{{ info.sex }}</td>
-            <td>BloodType</td>
-            <td>{{ info.bloodtype }}</td>
-          </tr>
-          <tr>
-            <td>CellPhone</td>
-            <td>{{ info.cellphone }}</td>
-            <td>Email</td>
-            <td>{{ info.email }}</td>
-          </tr>
-          <tr>
-            <td>MailBox</td>
-            <td colspan="3">{{ info.mailbox }}</td>
-          </tr>
-          <tr>
-            <td>Home Address</td>
-            <td colspan="3">{{ info.homeaddr }}</td>
-          </tr>
-          <tr>
-            <td>Current Address</td>
-            <td colspan="3">{{ info.currentaddr }}</td>
-          </tr>
-        </table>
-    </div>
-  </div>
-
     </div> <!-- /container -->
 
+{% endblock %}
+
+{% block extra_body %}
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -161,30 +99,29 @@
     <script src="{% static 'js/jquery.pin.js' %}"></script>
 
     <script>
-      $(".bs-docs-sidebar").pin({containerSelector: ".container", minWidth: 940});
-      $(document).ready(
-        function()
-        {
-          //$('.btn-ctl-display').hide();
-          $('#deluser').click(
-            function()
-            {
-              $('.btn-ctl-display').show();
-              /*$('.btn-ctl-display').css("display","block");*/
-            }
-          );
+        $(".bs-docs-sidebar").pin({containerSelector: ".container", minWidth: 940});
+        $(document).ready(
+                function()
+                {
+                    //$('.btn-ctl-display').hide();
+                    $('#deluser').click(
+                            function()
+                            {
+                                $('.btn-ctl-display').show();
+                                /*$('.btn-ctl-display').css("display","block");*/
+                            }
+                    );
 
-          $('#delete_ok').click(
-            function()
-            {
-              $('.btn-ctl-display').hide();
-            }
-          );
+                    $('#delete_ok').click(
+                            function()
+                            {
+                                $('.btn-ctl-display').hide();
+                            }
+                    );
 
-        }
-      );
+                }
+        );
     </script>
     <script type="text/javascript" src="{% static 'js/classmates.js' %}"></script>
 
-  </body>
-</html>
+{% endblock %}

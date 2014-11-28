@@ -1,193 +1,298 @@
+# coding=utf-8
 from django.template import loader, Context
 from django.http import HttpResponse, HttpResponseRedirect
-from mainapp.models import User, CommonInfo
+from mainapp.models import CommonInfo
 from django.shortcuts import render, render_to_response, RequestContext
-from django.core import serializers
+from django.contrib import auth
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 import time
-import hashlib
+import json
 
-# Create your views here.
 
+# 登陆页面
 def login_view(request):
-	if 'account' in request.POST:
-		account = request.POST.get('account')
-		password = request.POST.get('password')
-		#md = hashlib.md5
-		#value = md(password)
-		#valuepw = value.hexdigest()
+    if request.user.is_authenticated():
+        return main_view(request)
 
-		user = User.objects.filter(account = account)
-		if user and user[0].password == password:
-			request.session['user_id'] = user[0].id
-			return main_view(request)
+    if 'username' not in request.POST:
+        return render_to_response('signin.html', context_instance=RequestContext(request))
 
-	return render_to_response('signin.html', context_instance=RequestContext(request))
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
 
+    user = auth.authenticate(username=username, password=password)
+    if user is not None:
+        auth.login(request, user)
+        userinfo = CommonInfo.objects.get(user=user)
+        request.session['userid'] = userinfo.id
+        # 跳转到之前的页面
+        nextpage = request.GET.get('next')
+        if nextpage is not None:
+            return HttpResponseRedirect(nextpage)
+        return main_view(request)
+    else:
+        temp = loader.get_template('runscript.html')
+        alertstr = _('Account or password incorrect.')
+        url = 'login'
+        context = Context({
+            'alertstr': alertstr, 'url': url
+        })
+        return HttpResponse(temp.render(context))
+        #return render_to_response('signin.html', context_instance=RequestContext(request))
+
+
+@login_required(login_url="/login")
 def logout_view(request):
-	request.session.flush()
-	return HttpResponseRedirect('login')
+    auth.logout(request)
+    return HttpResponseRedirect('login')
 
+
+@login_required(login_url="/login")
 def main_view(request):
-	if request.session.get('user_id', -1) == -1:
-		return render_to_response('signin.html', context_instance=RequestContext(request))
+    # 所有用户列表
+    infolist = CommonInfo.objects.all()
+    # 当前用户
+    user = request.user
+    # 当前用户信息
+    info = CommonInfo.objects.get(user=user)
 
-	userList = User.objects.all()
-	userId = request.session['user_id']
-	currentUser = User.objects.get(id = userId)
-	info = CommonInfo.objects.get(user_id = userId)
+    SEX_TYPE = {
+        "": "---------",
+        "B": "Boy",
+        "G": "Girl"
+    }
+    BLOOD_TYPE = {
+        '': "---------",
+        'A': 'A',
+        'B': 'B',
+        'O': 'O',
+        'AB': 'AB'
+    }
 
-	temp = loader.get_template("main.html")
-	context = Context({
-		'userList': userList,
-		'currentUser': currentUser, 
-		'info': info
-		})
+    temp = loader.get_template("main.html")
+    # main页面渲染参数
+    context = Context({
+        'infolist': infolist,
+        'user': user,
+        'userinfo': info,
+        'info': info,
+        'SEX_TYPE': SEX_TYPE,
+        'BLOOD_TYPE': BLOOD_TYPE
+    }
+    )
 
-	return HttpResponse(temp.render(context))
+    return HttpResponse(temp.render(context))
 
-def info_view(request,userId):
-	if request.session.get('user_id', -1) == -1:
-		return render_to_response('signin.html', context_instance=RequestContext(request))
 
-	userList = User.objects.all()
-	currentUserId = request.session['user_id']
-	currentUser = User.objects.get(id = currentUserId)
-	infoqs = CommonInfo.objects.filter(user_id = userId)
-	if infoqs:
-		info = infoqs[0]
-	else:
-		info = CommonInfo.objects.get(user_id = currentUserId)
+@login_required(login_url="/login")
+def info_view(request, userid):
+    infolist = CommonInfo.objects.all()
+    user = request.user
+    userinfo = CommonInfo.objects.get(user=user)
+    seluserqs = User.objects.filter(id=userid)
 
-	temp = loader.get_template("main.html")
-	context = Context({
-		'userList': userList,
-		'currentUser': currentUser, 
-		'info': info
-		})
+    # 如果选择的用户不存在，则弹出提示，然后跳转到main页面
+    if not seluserqs.exists():
+        temp = loader.get_template('runscript.html')
+        alertstr = _('User you selected does not exists')
+        url = 'index'
+        context = Context({
+            'alertstr': alertstr, 'url': url
+        })
+        return HttpResponse(temp.render(context))
 
-	return HttpResponse(temp.render(context))	
+    seluser = seluserqs[0]
+    info = CommonInfo.objects.get(user=seluser)
 
-def editinfo_view(request, userId):
-	if request.session.get('user_id', -1) == -1:
-		return render_to_response('signin.html', context_instance=RequestContext(request))
+    SEX_TYPE = {
+        "": "---------",
+        "B": "Boy",
+        "G": "Girl"
+    }
+    BLOOD_TYPE = {
+        '': "---------",
+        'A': 'A',
+        'B': 'B',
+        'O': 'O',
+        'AB': 'AB'
+    }
 
-	userqs = User.objects.filter(id = userId)
-	if not userqs:
-		return main_view(request)
+    temp = loader.get_template("main.html")
+    context = Context({
+        'infolist': infolist,
+        'user': user,
+        'userinfo': userinfo,
+        'info': info,
+        'SEX_TYPE': SEX_TYPE,
+        'BLOOD_TYPE': BLOOD_TYPE
+    })
 
-	if 'id' not in request.POST:
-		#user = userqs[0]
-		userList = User.objects.all()
-		currentUserId = request.session['user_id']
-		currentUser = User.objects.get(id = currentUserId)	
-		infoqs = CommonInfo.objects.filter(user_id = userId)
-		if infoqs:
-			info = infoqs[0]
-		else:
-			info = CommonInfo.objects.get(user_id = currentUserId)
+    return HttpResponse(temp.render(context))
 
-		SEX_TYPE = {
-			"": "---------",
-			"B": "Boy",
-			"G": "Girl"
-		}
-		BLOOD_TYPE = {
-			'': "---------",
-			'A': 'A',
-			'B': 'B',
-			'O': 'O',
-			'AB': 'AB'
-			}
-		return render_to_response('main-editinfo.html',
-			{'userList': userList, 'currentUser': currentUser,
-			 'info': info, 'SEX_TYPE': SEX_TYPE, 'BLOOD_TYPE': BLOOD_TYPE},
-			context_instance=RequestContext(request))
 
-	infoqs = CommonInfo.objects.filter(user_id = userId)
-	if infoqs:
-		info = infoqs[0]
-	else:
-		return main_view(request)
+@login_required(login_url="/login")
+def editinfo_view(request, userid):
+    # 如果当前用户不是Admin，或者与userid不符合，则弹出提示，然后跳转到main页面
+    if request.user.id != long(userid) and (not request.user.is_staff):
+        temp = loader.get_template('runscript.html')
+        alertstr = _("Only staff can modify others' info")
+        url = 'index'
+        context = Context({
+            'alertstr': alertstr, 'url': url
+        })
+        return HttpResponse(temp.render(context))
 
-	info.ename = request.POST.get('ename')
-	info.birthday = request.POST.get('birthday')
-	info.sex = request.POST.get('sex')
-	info.bloodtype = request.POST.get('bloodtype')
-	info.cellphone = request.POST.get('cellphone')
-	info.email = request.POST.get('email')
-	info.mailbox = request.POST.get('mailbox')
-	info.homeaddr = request.POST.get('homeaddr')
-	info.currentaddr = request.POST.get('currentaddr')
-	info.save()
+    seluserqs = User.objects.filter(id=userid)
+    if not seluserqs.exists():
+        return main_view(request)
+    seluser = seluserqs[0]
 
-	return info_view(request, userId)
+    # 请求修改与修改提交使用同一个函数处理
+    # 请求修改时 userid 会在GET里面
+    # 修改提交时，数据在POST
+    # 点击 Edit 按钮，会跳转到 main-edit 页面
 
+    if 'userid' not in request.POST:
+        infolist = CommonInfo.objects.all()
+        user = request.user
+        userinfo = CommonInfo.objects.get(user=user)
+        info = CommonInfo.objects.get(user=seluser)
+
+        SEX_TYPE = {
+            "": "---------",
+            "B": "Boy",
+            "G": "Girl"
+        }
+        BLOOD_TYPE = {
+            '': "---------",
+            'A': 'A',
+            'B': 'B',
+            'O': 'O',
+            'AB': 'AB'
+        }
+        return render_to_response('main-editinfo.html',
+                                  {'infolist': infolist, 'user': user,
+                                   'userinfo': userinfo, 'info': info,
+                                   'SEX_TYPE': SEX_TYPE, 'BLOOD_TYPE': BLOOD_TYPE},
+                                  context_instance=RequestContext(request))
+
+    # 以下处理 修改提交
+    info = CommonInfo.objects.get(user=seluser)
+
+    info.ename = request.POST.get('ename')
+    info.birthday = request.POST.get('birthday')
+    info.sex = request.POST.get('sex')
+    info.bloodtype = request.POST.get('bloodtype')
+    info.cellphone = request.POST.get('cellphone')
+    info.email = request.POST.get('email')
+    info.mailbox = request.POST.get('mailbox')
+    info.homeaddr = request.POST.get('homeaddr')
+    info.currentaddr = request.POST.get('currentaddr')
+    info.save()
+
+    return info_view(request, userid)
+
+
+@login_required(login_url="/login")
 def password_view(request):
-	if request.session.get('user_id', -1) == -1:
-		return render_to_response('signin.html', context_instance=RequestContext(request))
+    user = request.user
 
-	if 'oldpassword' not in request.POST:
-		currentUserId = request.session.get('user_id')
-		currentUser = User.objects.get(id = currentUserId)
-		return render_to_response('password.html', {'currentUser':currentUser}, context_instance=RequestContext(request))
-	
-	oldpw = request.POST.get('oldpassword')
-	newpw = request.POST.get('newpassword')
-	#confirmpw = request.POST.get('confirmpassword')
-	# js confirm newpw is equal to confirmpw
-	
-	currentUserId = request.session.get('user_id')
-	currentUser = User.objects.get(id = currentUserId)
-	if oldpw == currentUser.password:
-		currentUser.password = newpw
-		currentUser.save()
+    if 'oldpassword' not in request.POST:
+        userinfo = CommonInfo.objects.get(user=user)
+        return render_to_response('password.html', {'user': user, 'userinfo': userinfo},
+                                  context_instance=RequestContext(request))
 
-	return main_view(request)
+    oldpw = request.POST.get('oldpassword')
+    newpw = request.POST.get('newpassword')
+    # confirmpw = request.POST.get('confirmpassword')
+    # js confirm newpw is equal to confirmpw
+    alertstr = ''
+    if user.check_password(raw_password=oldpw):
+        user.set_password(raw_password=newpw)
+        user.save()
+        alertstr = _('Password change')
+    else:
+        alertstr = _('Raw password incorrect.')
 
+    url = 'index'
+
+    temp = loader.get_template('runscript.html')
+    context = Context({
+        'alertstr': alertstr, 'url': url
+    })
+
+    return HttpResponse(temp.render(context))
+
+
+# return main_view(request)
+
+
+@login_required(login_url="/login")
 def newuser_view(request):
-	if request.session.get('user_id', -1) == -1:
-		return render_to_response('signin.html', context_instance=RequestContext(request))
+    if not request.user.is_staff:
+        return main_view(request)
 
-	if 'account' in request.POST:
-		#if User.objects.filter(account = account):
+    if 'username' in request.POST:
 
-		account = request.POST.get('account')
-		password = request.POST.get('password')
-		cname = request.POST.get('cname')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        newuserqs = User.objects.filter(username=username)
+        if newuserqs.exists():
+            alertstr = _('username exists.')
+            temp = loader.get_template('runscript.html')
+            url = 'index'
+            context = Context({
+                'alertstr': alertstr, 'url': url
+            })
+            return HttpResponse(temp.render(context))
 
-		user = User(account=account, password = password, cname = cname, role = 'C')
-		user.save()
-		info = CommonInfo(user=user)
-		info.ename=""
-		info.birthday =time.strftime('%Y-%m-%d',time.localtime(time.time()))
-		info.sex = ""
-		info.bloodtype = ""
-		info.cellphone = ""
-		info.email = ""
-		info.mailbox = ""
-		info.homeaddr = ""
-		info.currentaddr = "Mars"
-		info.save()
-		return main_view(request)
+        newuser = User.objects.create_user(username=username, password=password)
+        newuser.is_active = True
+        newuser.save()
 
-	currentUserId = request.session.get('user_id')
-	currentUser = User.objects.get(id = currentUserId)
+        cname = request.POST.get('cname')
+        info = CommonInfo(user=newuser)
+        info.cname = cname
+        info.ename = ""
+        info.birthday = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        info.sex = ""
+        info.bloodtype = ""
+        info.cellphone = ""
+        info.email = "xxxxx@xx.com"
+        info.mailbox = ""
+        info.homeaddr = ""
+        info.currentaddr = "Mars"
+        info.save()
+        return main_view(request)
 
-	return render_to_response('newuser.html',{'currentUser': currentUser }, context_instance = RequestContext(request))
+    user = request.user
+    userinfo = CommonInfo.objects.get(user=user)
 
+    return render_to_response('newuser.html', {'user': user, 'userinfo': userinfo},
+                              context_instance=RequestContext(request))
+
+
+@login_required(login_url="/login")
 def deleteuser_view(request):
-	if 'userId' in request.GET:
-		userId = request.GET.get('userId')
+    tempuser = {}
+    if 'userid' in request.GET:
+        userid = request.GET.get('userid')
 
-	userqs = User.objects.filter(id = userId)
-	if userqs:
-		user = userqs[0]
-		user.delete()
+        deluserqs = User.objects.filter(id=userid)
+        if deluserqs.exists() and not deluserqs[0].is_superuser:
+            deluser = deluserqs[0]
+            tempuser['id'] = deluser.id
+            info = CommonInfo.objects.get(user=deluser)
+            info.delete()
+            # 实际上delete的默认行为为Cascade
+            deluser.delete()
 
-	userList = User.objects.all()
+    #infolist = CommonInfo.objects.all()
 
-	res = HttpResponse()
-	res['Content-Type'] = "text/javascript"
-	res.write(serializers.serialize("json", userList))
+    res = HttpResponse()
+    res['Content-Type'] = "text/javascript"
+    res.write(json.JSONEncoder().encode(tempuser))
 
-	return res
+    return res
