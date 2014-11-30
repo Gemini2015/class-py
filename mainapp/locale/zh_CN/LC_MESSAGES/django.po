@@ -80,7 +80,7 @@ msgstr "编辑"
 
 #: .\templates\include\base_normal.html.py:30
 msgid "Activity"
-msgstr ""
+msgstr "活动"
 
 #: .\templates\include\base_normal.html.py:32
 #: .\templates\include\base_normal.html.py:39
