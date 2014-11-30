@@ -1,5 +1,5 @@
 # Directory filter
-
+.idea
 
 # File filter
 *.pyc

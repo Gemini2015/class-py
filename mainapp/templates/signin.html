@@ -9,19 +9,19 @@
 {% block content %}
 
     <div class="container">
+        <form class="form-signin" method="post">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">{% trans 'We are here...' %}</h2>
+            <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required autofocus>
+            <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required>
 
-      <form class="form-signin" method="post">
-        {% csrf_token %}
-        <h2 class="form-signin-heading">{% trans 'We are here...' %}</h2>
-        <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required autofocus>
-        <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required>
-        <!--
-          <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        -->
-        <input type="submit" class="btn btn-lg btn-primary btn-block" value="{% trans 'Sign in' %}"></input>
-      </form>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="rememberme">{% trans 'Remember me' %}
+                </label>
+            </div>
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="{% trans 'Sign in' %}"></input>
+        </form>
 
     </div> <!-- /container -->
 

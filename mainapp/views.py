@@ -17,6 +17,7 @@ def login_view(request):
         return main_view(request)
 
     if 'username' not in request.POST:
+        # 利用rememberme 信息
         return render_to_response('signin.html', context_instance=RequestContext(request))
 
     username = request.POST.get('username', '')
@@ -26,12 +27,22 @@ def login_view(request):
     if user is not None:
         auth.login(request, user)
         userinfo = CommonInfo.objects.get(user=user)
+        # 设置 session
         request.session['userid'] = userinfo.id
+        request.session.set_expiry(24 * 60 * 60)
+
         # 跳转到之前的页面
         nextpage = request.GET.get('next')
-        if nextpage is not None:
-            return HttpResponseRedirect(nextpage)
-        return main_view(request)
+        if nextpage is None:
+            nextpage = 'index'
+
+        response = HttpResponseRedirect(nextpage)
+        if 'rememberme' in request.POST:
+            if request.POST['rememberme']:
+                response.set_cookie('uid', user)
+        return response
+
+        #return main_view(request)
     else:
         temp = loader.get_template('runscript.html')
         alertstr = _('Account or password incorrect.')

@@ -26,6 +26,12 @@
                                 <li><a href="/password">{% trans 'Password' %}</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans 'Activity' %}<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">{% trans 'New' %}</a></li>
+                            </ul>
+                        </li>
                         {% if user.is_staff or user.is_superuser %}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans 'User' %}<b class="caret"></b></a>
