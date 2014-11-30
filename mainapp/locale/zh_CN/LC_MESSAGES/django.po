@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 22:07+0800\n"
+"POT-Creation-Date: 2014-11-30 23:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\views.py:38
+#: .\views.py:48
 msgid "Account or password incorrect."
 msgstr "用户名或密码错误。"
 
-#: .\views.py:100
+#: .\views.py:110
 msgid "User you selected does not exists"
 msgstr "用户不存在。"
 
-#: .\views.py:141
+#: .\views.py:151
 msgid "Only staff can modify others' info"
 msgstr "您只能修改自己的个人资料。"
 
-#: .\views.py:216
+#: .\views.py:226
 msgid "Password change"
 msgstr "密码修改成功"
 
-#: .\views.py:218
+#: .\views.py:228
 msgid "Raw password incorrect."
 msgstr "原始密码错误"
 
-#: .\views.py:244
+#: .\views.py:254
 msgid "username exists."
 msgstr "用户名已存在"
 
-#: .\templates\signin.html.py:15
+#: .\templates\signin.html.py:14
 msgid "We are here..."
 msgstr "有朋自远方来"
 
-#: .\templates\signin.html.py:16
+#: .\templates\signin.html.py:15
 msgid "Account"
 msgstr "账号"
 
-#: .\templates\signin.html.py:17 .\templates\include\base_normal.html.py:26
+#: .\templates\signin.html.py:16 .\templates\include\base_normal.html.py:26
 msgid "Password"
 msgstr "密码"
+
+#: .\templates\signin.html.py:20
+msgid "Remember me"
+msgstr ""
 
 #: .\templates\signin.html.py:23
 msgid "Sign in"
@@ -74,18 +78,23 @@ msgstr "首页"
 msgid "Edit"
 msgstr "编辑"
 
-#: .\templates\include\base_normal.html.py:31
-msgid "User"
-msgstr "用户"
+#: .\templates\include\base_normal.html.py:30
+msgid "Activity"
+msgstr ""
 
-#: .\templates\include\base_normal.html.py:33
+#: .\templates\include\base_normal.html.py:32
+#: .\templates\include\base_normal.html.py:39
 msgid "New"
 msgstr "新建"
 
-#: .\templates\include\base_normal.html.py:34
+#: .\templates\include\base_normal.html.py:37
+msgid "User"
+msgstr "用户"
+
+#: .\templates\include\base_normal.html.py:40
 msgid "Delete"
 msgstr "删除"
 
-#: .\templates\include\base_normal.html.py:43
+#: .\templates\include\base_normal.html.py:49
 msgid "Logout"
 msgstr "离开"
