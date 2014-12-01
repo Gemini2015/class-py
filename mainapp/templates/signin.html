@@ -12,15 +12,15 @@
         <form class="form-signin" method="post">
             {% csrf_token %}
             <h2 class="form-signin-heading">{% trans 'We are here...' %}</h2>
-            <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required autofocus>
-            <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required>
+            <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required {% if username == '' %} autofocus {% endif %} value="{{ username }}">
+            <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required {% if username != '' %} autofocus {% endif %}>
 
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="rememberme">{% trans 'Remember me' %}
                 </label>
             </div>
-            <input type="submit" class="btn btn-lg btn-primary btn-block" value="{% trans 'Sign in' %}"></input>
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="{% trans 'Sign in' %}">
         </form>
 
     </div> <!-- /container -->

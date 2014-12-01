@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.template import loader, Context
+from django.template import loader, Context, TemplateDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from mainapp.models import CommonInfo
 from django.shortcuts import render, render_to_response, RequestContext
@@ -17,8 +17,19 @@ def login_view(request):
         return main_view(request)
 
     if 'username' not in request.POST:
-        # 利用rememberme 信息
-        return render_to_response('signin.html', context_instance=RequestContext(request))
+        try:
+            temp = loader.get_template('signin.html')
+            ctxdic = dict()
+            if 'uid' in request.COOKIES:
+                uid = request.COOKIES.get('uid', -1)
+                users = User.objects.filter(id=uid)
+                if users.exists():
+                    user = users[0]
+                    ctxdic['username'] = user.username
+            context = RequestContext(request=request, dict_=ctxdic)
+            return HttpResponse(temp.render(context))
+        except TemplateDoesNotExist:
+            return render_to_response('404.html', context_instance=RequestContext(request))
 
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -37,9 +48,8 @@ def login_view(request):
             nextpage = 'index'
 
         response = HttpResponseRedirect(nextpage)
-        if 'rememberme' in request.POST:
-            if request.POST['rememberme']:
-                response.set_cookie('uid', user)
+        if 'rememberme' in request.POST and request.POST['rememberme'] == 'on':
+            response.set_cookie('uid', user.id, max_age=24*60*60)
         return response
 
         #return main_view(request)
@@ -67,7 +77,23 @@ def main_view(request):
     # 当前用户
     user = request.user
     # 当前用户信息
-    info = CommonInfo.objects.get(user=user)
+    #info = None
+    try:
+        info = CommonInfo.objects.get(user=user)
+    except CommonInfo.DoesNotExist:
+        # info未找到,新建一个信息
+        info = CommonInfo(user=user)
+        info.cname = "匿名的小伙伴"
+        info.ename = ""
+        info.birthday = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        info.sex = ""
+        info.bloodtype = ""
+        info.cellphone = ""
+        info.email = "xxxxx@xx.com"
+        info.mailbox = ""
+        info.homeaddr = ""
+        info.currentaddr = "Mars"
+        info.save()
 
     SEX_TYPE = {
         "": "---------",
@@ -91,8 +117,7 @@ def main_view(request):
         'info': info,
         'SEX_TYPE': SEX_TYPE,
         'BLOOD_TYPE': BLOOD_TYPE
-    }
-    )
+    })
 
     return HttpResponse(temp.render(context))
 
