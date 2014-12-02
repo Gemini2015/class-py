@@ -12,8 +12,8 @@
         <form class="form-signin" method="post">
             {% csrf_token %}
             <h2 class="form-signin-heading">{% trans 'We are here...' %}</h2>
-            <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required {% if username == '' %} autofocus {% endif %} value="{{ username }}">
-            <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required {% if username != '' %} autofocus {% endif %}>
+            <input type="text" name="username" class="form-control border-radius-top" placeholder="{% trans 'Account' %}" required {% if not username %} autofocus {% endif %} value="{{ username }}">
+            <input type="password" name="password" class="form-control border-radius-bottom" placeholder="{% trans 'Password' %}" required {% if username %} autofocus {% endif %}>
 
             <div class="checkbox">
                 <label>

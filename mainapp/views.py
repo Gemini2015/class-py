@@ -61,7 +61,7 @@ def login_view(request):
             'alertstr': alertstr, 'url': url
         })
         return HttpResponse(temp.render(context))
-        #return render_to_response('signin.html', context_instance=RequestContext(request))
+
 
 
 @login_required(login_url="/login")
@@ -107,8 +107,10 @@ def main_view(request):
         'O': 'O',
         'AB': 'AB'
     }
-
-    temp = loader.get_template("main.html")
+    try:
+        temp = loader.get_template("main.html")
+    except TemplateDoesNotExist:
+        return render_to_response('404.html', context=RequestContext(request))
     # main页面渲染参数
     context = Context({
         'infolist': infolist,
@@ -142,27 +144,14 @@ def info_view(request, userid):
     seluser = seluserqs[0]
     info = CommonInfo.objects.get(user=seluser)
 
-    SEX_TYPE = {
-        "": "---------",
-        "B": "Boy",
-        "G": "Girl"
-    }
-    BLOOD_TYPE = {
-        '': "---------",
-        'A': 'A',
-        'B': 'B',
-        'O': 'O',
-        'AB': 'AB'
-    }
-
     temp = loader.get_template("main.html")
     context = Context({
         'infolist': infolist,
         'user': user,
         'userinfo': userinfo,
         'info': info,
-        'SEX_TYPE': SEX_TYPE,
-        'BLOOD_TYPE': BLOOD_TYPE
+        'SEX_TYPE': CommonInfo.SEX_TYPE,
+        'BLOOD_TYPE': CommonInfo.BLOOD_TYPE
     })
 
     return HttpResponse(temp.render(context))
@@ -196,27 +185,17 @@ def editinfo_view(request, userid):
         userinfo = CommonInfo.objects.get(user=user)
         info = CommonInfo.objects.get(user=seluser)
 
-        SEX_TYPE = {
-            "": "---------",
-            "B": "Boy",
-            "G": "Girl"
-        }
-        BLOOD_TYPE = {
-            '': "---------",
-            'A': 'A',
-            'B': 'B',
-            'O': 'O',
-            'AB': 'AB'
-        }
         return render_to_response('main-editinfo.html',
                                   {'infolist': infolist, 'user': user,
                                    'userinfo': userinfo, 'info': info,
-                                   'SEX_TYPE': SEX_TYPE, 'BLOOD_TYPE': BLOOD_TYPE},
+                                   'SEX_TYPE': CommonInfo.SEX_TYPE, 'BLOOD_TYPE': CommonInfo.BLOOD_TYPE},
                                   context_instance=RequestContext(request))
 
     # 以下处理 修改提交
     info = CommonInfo.objects.get(user=seluser)
-
+    # 超级管理员可以修改中文名
+    if request.user.is_superuser:
+        info.cname = request.POST.get('cname')
     info.ename = request.POST.get('ename')
     info.birthday = request.POST.get('birthday')
     info.sex = request.POST.get('sex')
@@ -244,7 +223,6 @@ def password_view(request):
     newpw = request.POST.get('newpassword')
     # confirmpw = request.POST.get('confirmpassword')
     # js confirm newpw is equal to confirmpw
-    alertstr = ''
     if user.check_password(raw_password=oldpw):
         user.set_password(raw_password=newpw)
         user.save()
@@ -258,11 +236,7 @@ def password_view(request):
     context = Context({
         'alertstr': alertstr, 'url': url
     })
-
     return HttpResponse(temp.render(context))
-
-
-# return main_view(request)
 
 
 @login_required(login_url="/login")

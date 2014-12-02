@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load staticfiles %}
 
+{% block extra_head %}
+    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
     <div class="container">
@@ -45,7 +49,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Name</label>
                         <div class="col-lg-4">
-                            <input type="text" name="cname" class="form-control"  value="{{ info.cname }}" readonly="true">
+                            <input type="text" name="cname" class="form-control"  value="{{ info.cname }}"{% if not user.is_superuser %} readonly="true" {% endif %}>
                         </div>
                     </div>
                     <div class="form-group">
@@ -55,7 +59,7 @@
                         </div>
                         <label for="name" class="col-lg-2 control-label">Birthday</label>
                         <div class="col-lg-4">
-                            <input type="text" name="birthday" class="form-control"  value="{{ info.birthday|date:"Y-m-d" }}">
+                            <input type="text" id="datepicker" name="birthday" class="form-control"  value="{{ info.birthday|date:"Y-m-d" }}" data-date-format="yyyy-mm-dd" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
@@ -130,6 +134,8 @@
     <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/jquery.pin.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'js/locale/bootstrap-datetimepicker.zh-CN.js' %}" CHARSET="UTF-8"></script>
 
     <script>
         $(".bs-docs-sidebar").pin({containerSelector: ".container", minWidth: 940});
@@ -142,8 +148,18 @@
                                 $('.btn-ctl-display').hide();
                             }
                     );
-                }
-        );
+                });
+        $('#datepicker').datetimepicker({
+            language: '{{ LANGUAGE_CODE }}',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+
     </script>
 
     <script type="text/javascript" src="{% static 'js/classmates.js' %}"></script>
