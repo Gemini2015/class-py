@@ -95,18 +95,6 @@ def main_view(request):
         info.currentaddr = "Mars"
         info.save()
 
-    SEX_TYPE = {
-        "": "---------",
-        "B": "Boy",
-        "G": "Girl"
-    }
-    BLOOD_TYPE = {
-        '': "---------",
-        'A': 'A',
-        'B': 'B',
-        'O': 'O',
-        'AB': 'AB'
-    }
     try:
         temp = loader.get_template("main.html")
     except TemplateDoesNotExist:
@@ -117,8 +105,8 @@ def main_view(request):
         'user': user,
         'userinfo': info,
         'info': info,
-        'SEX_TYPE': SEX_TYPE,
-        'BLOOD_TYPE': BLOOD_TYPE
+        'SEX_TYPE': CommonInfo.SEX_TYPE,
+        'BLOOD_TYPE': CommonInfo.BLOOD_TYPE
     })
 
     return HttpResponse(temp.render(context))
@@ -221,8 +209,13 @@ def password_view(request):
 
     oldpw = request.POST.get('oldpassword')
     newpw = request.POST.get('newpassword')
-    # confirmpw = request.POST.get('confirmpassword')
-    # js confirm newpw is equal to confirmpw
+    comfirmpw = request.POST.get('confirmpassword')
+    if newpw != comfirmpw:
+        # js confirm newpw is equal to confirmpw
+        url = 'password'
+        alertstr = _('Password doesn\\\'t match the confirmation ')
+        return render_to_response('runscript.html', Context({'alertstr': alertstr, 'url': url}))
+
     if user.check_password(raw_password=oldpw):
         user.set_password(raw_password=newpw)
         user.save()

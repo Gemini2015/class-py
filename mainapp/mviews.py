@@ -34,7 +34,7 @@ def login_view(request):
         return res
     else:
         ret = {
-            'status': 2, # username or password error
+            'status': 2,  # username or password error
         }
         res.write(json.JSONEncoder().encode(ret))
         return res
