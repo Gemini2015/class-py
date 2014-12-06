@@ -67,7 +67,7 @@
                         <div class="col-lg-4">
                             <!-- <input type="text" name="sex" class="form-control"  value="{{ info.sex }}"> -->
                             <select name="sex" class="form-control">
-                                {% for key, value in SEX_TYPE.items %}
+                                {% for key, value in SEX_TYPE %}
                                     {% if key == info.sex %}
                                         <option value="{{ key }}" selected="selected">{{ value }}</option>
                                     {% else %}
@@ -80,7 +80,7 @@
                         <div class="col-lg-4">
                             <!-- <input type="text" name="bloodtype" class="form-control"  value="{{ info.bloodtype }}"> -->
                             <select name="bloodtype" class="form-control">
-                                {% for key, value in BLOOD_TYPE.items %}
+                                {% for key, value in BLOOD_TYPE %}
                                     {% if key == info.bloodtype %}
                                         <option value="{{ key }}" selected="selected">{{ value }}</option>
                                     {% else %}

@@ -52,13 +52,13 @@
                     </tr>
                     <tr>
                         <td>Sex</td>
-                        {% for key, value in SEX_TYPE.items %}
+                        {% for key, value in SEX_TYPE %}
                             {% if key == info.sex %}
                                 <td>{{ value }}</td>
                             {% endif %}
                         {% endfor %}
                         <td>BloodType</td>
-                        {% for key, value in BLOOD_TYPE.items %}
+                        {% for key, value in BLOOD_TYPE %}
                             {% if key == info.bloodtype %}
                                 <td>{{ value }}</td>
                             {% endif %}
