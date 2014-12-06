@@ -62,17 +62,20 @@ from django.contrib import admin
 
 class CommonInfo(models.Model):
     SEX_TYPE = (
+        ('', '------'),
         ('B', 'Boy'),
         ('G', 'Girl'),
     )
+    # choice 只能使用tuple
     BLOOD_TYPE = (
+        ('', '------'),
         ('A', 'A'),
         ('B', 'B'),
         ('O', 'O'),
         ('AB', 'AB'),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True)
-    cname = models.CharField(max_length = 20)
+    cname = models.CharField(max_length=20)
     ename = models.CharField(max_length=30, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)
     sex = models.CharField(max_length=1, choices=SEX_TYPE, null=True, blank=True)
