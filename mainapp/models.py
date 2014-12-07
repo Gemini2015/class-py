@@ -77,15 +77,15 @@ class CommonInfo(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True)
     cname = models.CharField(max_length=20)
-    ename = models.CharField(max_length=30, null=True, blank=True)
-    birthday = models.DateField(null=True, blank=True)
-    sex = models.CharField(max_length=1, choices=SEX_TYPE, null=True, blank=True)
-    bloodtype = models.CharField(max_length=2, choices=BLOOD_TYPE, null=True, blank=True)
-    cellphone = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    mailbox = models.CharField(max_length=100, null=True, blank=True)
-    homeaddr = models.CharField(max_length=100, null=True, blank=True)
-    currentaddr = models.CharField(max_length=100, null=True, blank=True)
+    ename = models.CharField(max_length=30, blank=True)
+    birthday = models.DateField()
+    sex = models.CharField(max_length=1, choices=SEX_TYPE, blank=True)
+    bloodtype = models.CharField(max_length=2, choices=BLOOD_TYPE, blank=True)
+    cellphone = models.CharField(max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+    mailbox = models.CharField(max_length=100, blank=True)
+    homeaddr = models.CharField(max_length=100, blank=True)
+    currentaddr = models.CharField(max_length=100, blank=True)
 
 
     def __unicode__(self):
@@ -104,10 +104,10 @@ admin.site.register(CommonInfo, InfoAdmin)
 class Activity(models.Model):
     # 活动标题
     title = models.CharField(max_length=100, blank=False)
-    # 创建者
-    user_creator = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
+    # 创建者，不创建反向关系
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, related_name='+')
     # 组织者
-    # user_organizer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, related_name='+')
     # 时间
     datetime = models.DateTimeField()
     # 地点
@@ -141,7 +141,7 @@ class Activity(models.Model):
 
 
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user_creator', 'datetime', 'location', 'content', 'status')
+    list_display = ('title', 'creator', 'organizer', 'datetime', 'location', 'content', 'status')
 
 admin.site.register(Activity, ActivityAdmin)
 

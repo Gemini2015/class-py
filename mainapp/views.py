@@ -37,9 +37,8 @@ def login_view(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)
-        userinfo = CommonInfo.objects.get(user=user)
         # 设置 session
-        request.session['userid'] = userinfo.id
+        request.session['userid'] = user.id
         request.session.set_expiry(24 * 60 * 60)
 
         # 跳转到之前的页面
