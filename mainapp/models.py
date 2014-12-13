@@ -129,15 +129,15 @@ class Activity(models.Model):
     def __str__(self):
         return self.__unicode__()
 
-    def __init__(self, *args, **kwargs):
-        self.creator = kwargs.get('creator')
-        self.title = kwargs.get('title', '')
-        self.organizer = kwargs.get('organizer', None)
-        self.datetime = kwargs.get('datetime', None)
-        self.location = kwargs.get('location', '')
-        self.content = kwargs.get('content', '')
-        self.status = kwargs.get('status', 1)
-        models.Model.__init__(self, *args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     self.creator = kwargs.get('creator', None)
+    #     self.title = kwargs.get('title', '')
+    #     self.organizer = kwargs.get('organizer', None)
+    #     self.datetime = kwargs.get('datetime', None)
+    #     self.location = kwargs.get('location', '')
+    #     self.content = kwargs.get('content', '')
+    #     self.status = kwargs.get('status', 1)
+    #     models.Model.__init__(self, *args, **kwargs)
 
 
 class ActivityAdmin(admin.ModelAdmin):
@@ -145,3 +145,32 @@ class ActivityAdmin(admin.ModelAdmin):
 
 admin.site.register(Activity, ActivityAdmin)
 
+
+class Comments(models.Model):
+    """
+    定义整个系统的评论
+    """
+    # 定义评论所属板块
+    SECTION_TYPE = (
+        (1, 'Activity'),
+        (2, 'Other'),
+    )
+    section = models.SmallIntegerField(choices=SECTION_TYPE, blank=False)
+    # 对应评论项的ID
+    item = models.IntegerField(blank=False)
+    # 评论人员
+    commentator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False)
+    # 是否匿名评论
+    is_anonymous = models.BooleanField()
+    # 时间
+    datetime = models.DateTimeField()
+    # 内容
+    comment = models.CharField(max_length=200, blank=False)
+    # 其他信息
+    remark = models.CharField(max_length=100, blank=True)
+
+
+class CommentsAdmin(admin.ModelAdmin):
+    list_display = ('section', 'item', 'commentator', 'is_anonymous', 'datetime', 'comment', 'remark')
+
+admin.site.register(Comments, CommentsAdmin)
