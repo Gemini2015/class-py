@@ -146,16 +146,36 @@ class ActivityAdmin(admin.ModelAdmin):
 admin.site.register(Activity, ActivityAdmin)
 
 
-class Comments(models.Model):
+class UserActivity(models.Model):
     """
-    定义整个系统的评论
+    用来记录用户参与活动的记录
     """
-    # 定义评论所属板块
+    # 用户
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False)
+    # 板块
     SECTION_TYPE = (
         (1, 'Activity'),
         (2, 'Other'),
     )
     section = models.SmallIntegerField(choices=SECTION_TYPE, blank=False)
+    # 项的ID
+    item = models.IntegerField(blank=False)
+    # 是否参与
+    is_participate = models.BooleanField()
+
+
+class UserActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'section', 'item', 'is_participate')
+
+admin.site.register(UserActivity, UserActivityAdmin)
+
+
+class Comment(models.Model):
+    """
+    定义整个系统的评论
+    """
+    # 定义评论所属板块
+    section = models.SmallIntegerField(choices=UserActivity.SECTION_TYPE, blank=False)
     # 对应评论项的ID
     item = models.IntegerField(blank=False)
     # 评论人员
@@ -165,12 +185,12 @@ class Comments(models.Model):
     # 时间
     datetime = models.DateTimeField()
     # 内容
-    comment = models.CharField(max_length=200, blank=False)
+    content = models.CharField(max_length=200, blank=False)
     # 其他信息
     remark = models.CharField(max_length=100, blank=True)
 
 
-class CommentsAdmin(admin.ModelAdmin):
-    list_display = ('section', 'item', 'commentator', 'is_anonymous', 'datetime', 'comment', 'remark')
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('section', 'item', 'commentator', 'is_anonymous', 'datetime', 'content', 'remark')
 
-admin.site.register(Comments, CommentsAdmin)
+admin.site.register(Comment, CommentAdmin)
