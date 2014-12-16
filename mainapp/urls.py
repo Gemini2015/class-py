@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 	url(r'^editinfo/(?P<userid>\d+)$',editinfo_view),
 	url(r'^newuser$', newuser_view),
 	url(r'^deleteuser$', deleteuser_view),
+    url(r'^activity$', activity_main_view),
 	url(r'^$', login_view),
 	)
 
