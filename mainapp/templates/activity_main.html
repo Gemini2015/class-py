@@ -27,70 +27,124 @@
 
             <div class="col-lg-7">
                 <div class="row">
-                    <div class="row infohead">
-                        <div class="col-lg-10 infotitle">Infomation</div>
-                        <div class="col-lg-2 infomenu">
-                            {% if user == info.user or user.is_staff %}
-                                <button class="btn btn-sm btn-primary"
-                                        onclick="location='/editinfo/{{ info.user.id }}'">Edit
-                                </button>
-                            {% endif %}
-                        </div>
+                    <!-- Activity info row -->
+                    <div class="activity-info">
+                        <div class="activity-info-title">
+                            <div class="row">
+                                <div class="col-lg-7">
+                                    <h3>Activity Title</h3>
+                                </div>
+                                <div class="col-lg-2 pull-right">
+                                    <h3>Status</h3>
+                                </div>
+                            </div>
+                        </div><!-- Activity info title -->
+
+                        <div class="activity-info-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <p><strong>Date: </strong>2014-12-26 12:55</p>
+                                </div>
+                                <div class="col-lg-7">
+                                    <p><strong>Location: </strong>xxxxxxxxxxxxxxxxxx</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <p><strong>Creator: </strong>xxxxxx</p>
+                                </div>
+                                <div class="col-lg-7">
+                                    <p><strong>Organizer: </strong>xxxxxxxxxxxxxxxxxx</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <p><strong>Content: </strong></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="activity-info-body-desc">
+                                        <p>xxxxxxxxxxxxx</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- activity info content -->
+
+                        <div class="activity-info-btn-group activity-info-body">
+                            <div class="row">
+                                <div class="col-lg-6 activity-info-btn-share">
+                                    <label>Some share button</label>
+                                </div>
+                                <div class="col-lg-6 text-right">
+                                    <button class="btn btn-sm btn-primary">Delete</button>
+                                    <button class="btn btn-sm btn-primary">Publish</button>
+                                </div>
+                            </div>
+                        </div><!-- Activity info btn group -->
                     </div>
-                    <table class="table table-bordered table-hover infotable">
-                        <tr>
-                            <td>Name</td>
-                            <td colspan="3">{{ info.cname }}</td>
-                        </tr>
-                        <tr>
-                            <td>English Name</td>
-                            <td>{{ info.ename }}</td>
-                            <td>Birthday</td>
-                            <td>{{ info.birthday|date:"Y-m-d" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sex</td>
-                            {% for key, value in SEX_TYPE %}
-                                {% if key == info.sex %}
-                                    <td>{{ value }}</td>
-                                {% endif %}
-                            {% endfor %}
-                            <td>BloodType</td>
-                            {% for key, value in BLOOD_TYPE %}
-                                {% if key == info.bloodtype %}
-                                    <td>{{ value }}</td>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
-                        <tr>
-                            <td>CellPhone</td>
-                            <td>{{ info.cellphone }}</td>
-                            <td>Email</td>
-                            <td>{{ info.email }}</td>
-                        </tr>
-                        <tr>
-                            <td>MailBox</td>
-                            <td colspan="3">{{ info.mailbox }}</td>
-                        </tr>
-                        <tr>
-                            <td>Home Address</td>
-                            <td colspan="3">{{ info.homeaddr }}</td>
-                        </tr>
-                        <tr>
-                            <td>Current Address</td>
-                            <td colspan="3">{{ info.currentaddr }}</td>
-                        </tr>
-                    </table>
                 </div>
+                <div class="row">
+                    <!-- Activity comment row-->
+                    <div class="activity-comment col-lg-12">
 
-                {% for p in infolist %}
-
-                        <div class="row ">
-                            <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
+                        <div class="row activity-comment-add">
+                            <div class="col-lg-12">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label for="newcomment">Comment</label>
+                                        <textarea id="newcomment" class="form-control" rows="4">Write your comment
+                                        </textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-default pull-right">Submit</button>
+                                </form>
+                            </div>
                         </div>
 
-                {% endfor %}
+                        <div class="row activity-comment-item">
+                            <div class="col-lg-2">
+                                <div>Image</div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <div class="col-lg-8 text-left">
+                                        <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
+                                    </div>
+                                    <div class="col-lg-4 text-right">
+                                        <button class="btn btn-xs btn-danger">Del</button>
+                                    </div>
+                                </div>
+                                <div class="row activity-comment-content">
+                                    <p>this is a comment.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
+
+                        <div class="row activity-comment-item">
+                            <div class="col-lg-10">
+                                <div class="row activity-comment-header-right">
+                                    <div class="col-lg-4 text-left">
+                                        <button class="btn btn-xs btn-danger">Del</button>
+                                    </div>
+                                    <div class="col-lg-8 text-right">
+                                        <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
+                                    </div>
+                                </div>
+                                <div class="row activity-comment-content">
+                                    <p>
+                                        this is a comment.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div>Image</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <div class="col-lg-2">
