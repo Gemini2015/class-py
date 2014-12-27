@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 	url(r'^newuser$', newuser_view),
 	url(r'^deleteuser$', deleteuser_view),
     url(r'^activity$', activity_main_view),
+    url(r'^activity_new', activity_new_view),
 	url(r'^$', login_view),
 	)
 
