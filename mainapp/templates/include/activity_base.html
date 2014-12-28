@@ -9,8 +9,6 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
                     <ul id="infolist" class="nav nav-list main-sidenav">
 
                         {% for p in infolist %}
@@ -32,9 +30,21 @@
             </div>
 
             <div class="col-lg-2">
-                <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
+                <div class="bs-docs-sidebar bs-docs-sidebar-btn-group-2">
+
+                    <div class="row">
+                        <button class="btn btn-primary">Add</button>
+                        <button class="btn btn-primary">Del</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary">Join</button>
+                        <button class="btn btn-primary">Quit</button>
+                    </div>
+
+                    <div class="participants-list-header">
+                        <label>Participants</label>
+                    </div>
+
                     <ul id="infolist" class="nav nav-list main-sidenav">
 
                         {% for p in infolist %}
