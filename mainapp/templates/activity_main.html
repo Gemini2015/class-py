@@ -1,181 +1,136 @@
-{% extends 'include/base_normal.html' %}
+{% extends 'include/activity_base.html' %}
 {% load i18n %}
 {% load staticfiles %}
 
-{% block content %}
+{% block activity_main_col %}
 
-    <div class="container">
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
-                    <ul id="infolist" class="nav nav-list main-sidenav">
-
-                        {% for p in infolist %}
-                            <li id="{{ p.user.id }}">
-                                <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
+    <div class="row">
+        <!-- Activity info row -->
+        <div class="activity-info">
+            <div class="activity-info-title">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <h3>Activity Title</h3>
+                    </div>
+                    <div class="col-lg-2 pull-right">
+                        <h3>Status</h3>
+                    </div>
                 </div>
             </div>
+            <!-- Activity info title -->
 
-            <div class="col-lg-7">
+            <div class="activity-info-body">
                 <div class="row">
-                    <!-- Activity info row -->
-                    <div class="activity-info">
-                        <div class="activity-info-title">
-                            <div class="row">
-                                <div class="col-lg-7">
-                                    <h3>Activity Title</h3>
-                                </div>
-                                <div class="col-lg-2 pull-right">
-                                    <h3>Status</h3>
-                                </div>
-                            </div>
-                        </div><!-- Activity info title -->
-
-                        <div class="activity-info-body">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <p><strong>Date: </strong>2014-12-26 12:55</p>
-                                </div>
-                                <div class="col-lg-7">
-                                    <p><strong>Location: </strong>xxxxxxxxxxxxxxxxxx</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <p><strong>Creator: </strong>xxxxxx</p>
-                                </div>
-                                <div class="col-lg-7">
-                                    <p><strong>Organizer: </strong>xxxxxxxxxxxxxxxxxx</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <p><strong>Content: </strong></p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="activity-info-body-desc">
-                                        <p>xxxxxxxxxxxxx</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- activity info content -->
-
-                        <div class="activity-info-btn-group activity-info-body">
-                            <div class="row">
-                                <div class="col-lg-6 activity-info-btn-share">
-                                    <label>Some share button</label>
-                                </div>
-                                <div class="col-lg-6 text-right">
-                                    <button class="btn btn-sm btn-primary">Delete</button>
-                                    <button class="btn btn-sm btn-primary">Publish</button>
-                                </div>
-                            </div>
-                        </div><!-- Activity info btn group -->
+                    <div class="col-lg-5">
+                        <p><strong>Date: </strong>2014-12-26 12:55</p>
+                    </div>
+                    <div class="col-lg-7">
+                        <p><strong>Location: </strong>xxxxxxxxxxxxxxxxxx</p>
                     </div>
                 </div>
                 <div class="row">
-                    <!-- Activity comment row-->
-                    <div class="activity-comment col-lg-12">
-
-                        <div class="row activity-comment-add">
-                            <div class="col-lg-12">
-                                <form role="form">
-                                    <div class="form-group">
-                                        <label for="newcomment">Comment</label>
-                                        <textarea id="newcomment" class="form-control" rows="4">Write your comment
-                                        </textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-default pull-right">Submit</button>
-                                </form>
-                            </div>
+                    <div class="col-lg-5">
+                        <p><strong>Creator: </strong>xxxxxx</p>
+                    </div>
+                    <div class="col-lg-7">
+                        <p><strong>Organizer: </strong>xxxxxxxxxxxxxxxxxx</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <p><strong>Content: </strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="activity-info-body-desc">
+                            <p>xxxxxxxxxxxxx</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- activity info content -->
 
-                        <div class="row activity-comment-item">
-                            <div class="col-lg-2">
-                                <div>Image</div>
-                            </div>
-                            <div class="col-lg-10">
-                                <div class="row">
-                                    <div class="col-lg-8 text-left">
-                                        <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
-                                    </div>
-                                    <div class="col-lg-4 text-right">
-                                        <button class="btn btn-xs btn-danger">Del</button>
-                                    </div>
-                                </div>
-                                <div class="row activity-comment-content">
-                                    <p>this is a comment.
-                                    </p>
-                                </div>
-                            </div>
+            <div class="activity-info-btn-group activity-info-body">
+                <div class="row">
+                    <div class="col-lg-6 activity-info-btn-share">
+                        <label>Some share button</label>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button class="btn btn-sm btn-primary">Delete</button>
+                        <button class="btn btn-sm btn-primary">Publish</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Activity info btn group -->
+        </div>
+    </div>
+    <div class="row">
+        <!-- Activity comment row-->
+        <div class="activity-comment col-lg-12">
+
+            <div class="row activity-comment-add">
+                <div class="col-lg-12">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="newcomment">Comment</label>
+                            <textarea id="newcomment" class="form-control" rows="4">Write your comment
+                            </textarea>
                         </div>
+                        <button type="submit" class="btn btn-default pull-right">Submit</button>
+                    </form>
+                </div>
+            </div>
 
-
-                        <div class="row activity-comment-item">
-                            <div class="col-lg-10">
-                                <div class="row activity-comment-header-right">
-                                    <div class="col-lg-4 text-left">
-                                        <button class="btn btn-xs btn-danger">Del</button>
-                                    </div>
-                                    <div class="col-lg-8 text-right">
-                                        <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
-                                    </div>
-                                </div>
-                                <div class="row activity-comment-content">
-                                    <p>
-                                        this is a comment.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <div>Image</div>
-                            </div>
+            <div class="row activity-comment-item">
+                <div class="col-lg-2">
+                    <div>Image</div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-8 text-left">
+                            <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
                         </div>
-
+                        <div class="col-lg-4 text-right">
+                            <button class="btn btn-xs btn-danger">Del</button>
+                        </div>
+                    </div>
+                    <div class="row activity-comment-content">
+                        <p>this is a comment.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-2">
-                <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
-                    <ul id="infolist" class="nav nav-list main-sidenav">
 
-                        {% for p in infolist %}
-                            <li id="{{ p.user.id }}">
-                                <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
+            <div class="row activity-comment-item">
+                <div class="col-lg-10">
+                    <div class="row activity-comment-header-right">
+                        <div class="col-lg-4 text-left">
+                            <button class="btn btn-xs btn-danger">Del</button>
+                        </div>
+                        <div class="col-lg-8 text-right">
+                            <p><strong>Chris Cheng</strong> @ 2014-12-26 20:25</p>
+                        </div>
+                    </div>
+                    <div class="row activity-comment-content">
+                        <p>
+                            this is a comment.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div>Image</div>
                 </div>
             </div>
-        </div>  <!-- /row -->
-    </div> <!-- /container -->
+
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block extra_body %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/jquery.pin.js' %}"></script>
 
     <script>

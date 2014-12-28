@@ -1,0 +1,54 @@
+{% extends 'include/base_normal.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="container">
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="bs-docs-sidebar">
+                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
+                    <hr class="btn-ctl-display">
+                    <ul id="infolist" class="nav nav-list main-sidenav">
+
+                        {% for p in infolist %}
+                            <li id="{{ p.user.id }}">
+                                <div class="row list-item">
+                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+               {% block activity_main_col %}
+                   <p>Let's create an activity!</p>
+               {% endblock %}
+            </div>
+
+            <div class="col-lg-2">
+                <div class="bs-docs-sidebar">
+                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
+                    <hr class="btn-ctl-display">
+                    <ul id="infolist" class="nav nav-list main-sidenav">
+
+                        {% for p in infolist %}
+                            <li id="{{ p.user.id }}">
+                                <div class="row list-item">
+                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>  <!-- /row -->
+    </div> <!-- /container -->
+
+{% endblock %}

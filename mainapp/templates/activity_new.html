@@ -1,4 +1,4 @@
-{% extends 'include/base_normal.html' %}
+{% extends 'include/activity_base.html' %}
 {% load i18n %}
 {% load staticfiles %}
 
@@ -7,123 +7,75 @@
     <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block content %}
+{% block activity_main_col %}
 
-    <div class="container">
-        <!-- Main component for a primary marketing message or call to action -->
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
-                    <ul id="infolist" class="nav nav-list main-sidenav">
+    <div class="row">
+        <div class="activity-form">
+            <form role="form" class="form-horizontal">
+                <!-- create an activity -->
+                <div class="form-group">
+                    <label for="activitytitle" class="col-sm-3 control-label">Title</label>
 
-                        {% for p in infolist %}
-                            <li id="{{ p.user.id }}">
-                                <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="row">
-                    <div class="activity-form">
-                        <form role="form" class="form-horizontal">
-                            <!-- create an activity -->
-                            <div class="form-group">
-                                <label for="activitytitle" class="col-sm-3 control-label">Title</label>
-
-                                <div class="col-sm-8">
-                                    <input type="text" id="activitytitle" class="form-control"
-                                           placeholder="Input a name" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="date" class="col-sm-3 control-label">Date</label>
-
-                                <div class="col-sm-8">
-
-                                    <input type="text" id="datepicker" name="birthday" class="form-control"
-                                           value="2014-12-26 16:25" data-date-format="yyyy-mm-dd hh:ii"
-                                           readonly="readonly">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="location" class="col-sm-3 control-label">Location</label>
-
-                                <div class="col-sm-8">
-                                    <input type="text" id="location" class="form-control" placeholder="location"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="creator" class="col-sm-3 control-label">Creator</label>
-
-                                <div class="col-sm-8">
-                                    <input type="text" id="creator" class="form-control" placeholder="creator" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="organizer" class="col-sm-3 control-label">Organizer</label>
-
-                                <div class="col-sm-8">
-                                    <input type="text" id="organizer" class="form-control" placeholder="organizer"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Content" class="col-sm-3 control-label">Content</label>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-10 col-sm-offset-1">
-                                    <textarea id="content" class="form-control" rows="6" placeholder="content"
-                                              required></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2 col-sm-offset-9">
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-sm-8">
+                        <input type="text" id="activitytitle" class="form-control"
+                               placeholder="Input a name" required>
                     </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="date" class="col-sm-3 control-label">Date</label>
 
-            <div class="col-lg-2">
-                <div class="bs-docs-sidebar">
-                    <button id="delete_ok" class="btn btn-ctl-display delete-ok-style" > OK </button>
-                    <hr class="btn-ctl-display">
-                    <ul id="infolist" class="nav nav-list main-sidenav">
+                    <div class="col-sm-8">
 
-                        {% for p in infolist %}
-                            <li id="{{ p.user.id }}">
-                                <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
+                        <input type="text" id="datepicker" name="birthday" class="form-control"
+                               value="2014-12-26 16:25" data-date-format="yyyy-mm-dd hh:ii"
+                               readonly="readonly">
+                    </div>
                 </div>
-            </div>
-        </div>  <!-- /row -->
-    </div> <!-- /container -->
+                <div class="form-group">
+                    <label for="location" class="col-sm-3 control-label">Location</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" id="location" class="form-control" placeholder="location"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="creator" class="col-sm-3 control-label">Creator</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" id="creator" class="form-control" placeholder="creator" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="organizer" class="col-sm-3 control-label">Organizer</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" id="organizer" class="form-control" placeholder="organizer"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Content" class="col-sm-3 control-label">Content</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <textarea id="content" class="form-control" rows="6" placeholder="content"
+                                  required></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-sm-offset-9">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block extra_body %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/jquery.pin.js' %}"></script>
     <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
     <script src="{% static 'js/locale/bootstrap-datetimepicker.zh-CN.js' %}" CHARSET="UTF-8"></script>
