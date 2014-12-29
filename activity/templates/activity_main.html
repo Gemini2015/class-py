@@ -7,6 +7,7 @@
     <div class="row">
         <!-- Activity info row -->
         <div class="activity-info">
+            <input type="hidden" id="activityid" name="activityid" value="{{ activity.id }}">
             <div class="activity-info-title">
                 <div class="row">
                     <div class="col-lg-7">
@@ -103,12 +104,12 @@
 
             {% for comment in comments %}
                 {% if comment.commentator == userinfo and not comment.is_anonymous %}
-                    <div class="row activity-comment-item">
+                    <div class="row activity-comment-item" id="comment{{ comment.id }}">
                         <div class="col-lg-10">
                             <div class="row activity-comment-header-right">
                                 {% if user.is_staff %}
                                     <div class="col-lg-4 text-left">
-                                        <button class="btn btn-xs btn-danger">Del</button>
+                                        <button class="btn btn-xs btn-danger" onclick="del_comment({{ comment.id }})">Del</button>
                                     </div>
                                 {% endif %}
                                 <div class="col-lg-8 text-right">
@@ -125,7 +126,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <div class="row activity-comment-item">
+                    <div class="row activity-comment-item" id="comment{{ comment.id }}">
                         <div class="col-lg-2">
                             <div>Image</div>
                         </div>
@@ -143,7 +144,7 @@
                                 </div>
                                 {% if user.is_staff %}
                                     <div class="col-lg-4 text-right">
-                                        <button class="btn btn-xs btn-danger">Del</button>
+                                        <button class="btn btn-xs btn-danger" onclick="del_comment({{ comment.id }})">Del</button>
                                     </div>
                                 {% endif %}
                             </div>

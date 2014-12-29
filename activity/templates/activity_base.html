@@ -33,22 +33,22 @@
                 <div class="bs-docs-sidebar">
                     {% if user.is_staff or activity.creator == userinfo %}
                         <div class="row participants-list-btn-group-1">
-                            <button class="btn btn-primary">Manage</button>
+                            <button id="btn-manage" class="btn btn-primary">Manage</button>
                         </div>
                     {% endif %}
                     <div class="row participants-list-btn-group-2">
-                        <button class="btn btn-primary">Join</button>
-                        <button class="btn btn-primary">Quit</button>
+                        <button id="btn-join" class="btn btn-primary" onclick="join_activity()">Join</button>
+                        <button id="btn-quit" class="btn btn-primary" onclick="quit_activity()">Quit</button>
                     </div>
 
                     <div class="participants-list-header">
                         <label>Participants</label>
                     </div>
 
-                    <ul id="infolist" class="nav nav-list main-sidenav">
+                    <ul id="participants-list" class="nav nav-list main-sidenav">
 
                         {% for p in participants %}
-                            <li id="{{ p.user.id }}">
+                            <li id="participants{{ p.user.id }}">
                                 <div class="row list-item">
                                     <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
                                 </div>
@@ -61,4 +61,5 @@
         </div>  <!-- /row -->
     </div> <!-- /container -->
 
+    <script src="{% static 'js/activity.js' %}"></script>
 {% endblock %}

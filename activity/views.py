@@ -175,9 +175,12 @@ def activity_quit_view(request):
         return json_return(4)
 
     useractivity = useractivity[0]
+
+    data = {'id': userinfo.user.id, }
+
     useractivity.delete()
 
-    return json_return(1)
+    return json_return(1, data=data)
 
 
 @login_required(login_url='/login')
@@ -194,9 +197,12 @@ def activity_del_comment_view(request):
         return json_return(4)
 
     comment = comment[0]
+
+    data = {'commentid': comment.id, }
+
     comment.delete()
 
-    return json_return(1)
+    return json_return(1, data=data)
 
 
 def json_return(code, data=None):
@@ -204,11 +210,11 @@ def json_return(code, data=None):
     res['Content-Type'] = "text/javascript"
 
     error_dict = {
-        '1': 'success',
-        '2': 'invalid parameter',
-        '3': 'permission denied',
-        '4': 'object not exists',
-        '5': 'object already exists',
+        1: 'success',
+        2: 'invalid parameter',
+        3: 'permission denied',
+        4: 'object not exists',
+        5: 'object already exists',
     }
 
     message = error_dict[code]

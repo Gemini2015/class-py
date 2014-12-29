@@ -7,7 +7,7 @@ urlpatterns = patterns('',
                        url(r'^new', activity_new_view),
                        url(r'^(?P<activity_id>\d+)$', activity_info_view),
                        url(r'^join$', activity_join_view),
-                       url(r'^quit', activity_quit_view),
+                       url(r'^quit$', activity_quit_view),
                        url(r'^del_comment$', activity_del_comment_view),
                        url(r'^$', activity_main_view),
                        )
