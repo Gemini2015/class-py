@@ -27,7 +27,7 @@ def activity_main_view(request):
     activity = activities[0]
     participant_id_list = UserActivity.objects.filter(item=activity.id, is_participate=True).values_list('user')
     participant_info_list = CommonInfo.objects.filter(id__in=participant_id_list)
-    comments = Comment.objects.filter(item=activity.id)
+    comments = Comment.objects.filter(item=activity.id).order_by('datetime')
     try:
         temp = loader.get_template('activity_main.html')
     except TemplateDoesNotExist:
@@ -119,7 +119,7 @@ def activity_info_view(request, activity_id):
     participant_id_list = UserActivity.objects.filter(item=activity.id, is_participate=True).values_list('user')
     participant_info_list = CommonInfo.objects.filter(id__in=participant_id_list)
 
-    comments = Comment.objects.filter(item=activity.id)
+    comments = Comment.objects.filter(item=activity.id).order_by('datetime')
     try:
         temp = loader.get_template('activity_main.html')
     except TemplateDoesNotExist:
@@ -201,6 +201,42 @@ def activity_del_comment_view(request):
     data = {'commentid': comment.id, }
 
     comment.delete()
+
+    return json_return(1, data=data)
+
+
+@login_required(login_url='/login')
+def activity_post_comment_view(request):
+    if 'comment' not in request.GET:
+        return json_return(2)
+
+    if 'activityid' not in request.GET:
+        return json_return(2)
+
+    content = request.GET.get('comment', '')
+    activityid = request.GET.get('activityid', 0)
+    if content == '' or activityid == 0:
+        return json_return(2)
+
+    user = request.user
+    userinfo = CommonInfo.objects.get(user=user)
+    comment = Comment()
+    comment.commentator = userinfo
+    comment.content = content
+    comment.section = 1
+    comment.item = activityid
+    comment.is_anonymous = False
+    datetime = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
+    comment.datetime = datetime
+    comment.save()
+
+    data = {
+        'name': userinfo.cname,
+        'datetime': datetime,
+        'commentid': comment.id,
+        'is_staff': user.is_staff,
+        'content': comment.content,
+    }
 
     return json_return(1, data=data)
 

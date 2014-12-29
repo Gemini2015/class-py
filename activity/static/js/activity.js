@@ -57,3 +57,54 @@ function del_comment_process(data)
         $('.activity-comment').children('#comment' + data.commentid).remove();
     }
 }
+
+function post_comment()
+{
+    var text = $('#newcomment').val();
+    if(text != '')
+    {
+        $.getJSON(
+		'/activity/post_comment',
+		{ comment: text,
+          activityid: $('#activityid').val()
+        },
+		function(data)
+		{
+			post_comment_process(data);
+		});
+    }
+}
+
+function post_comment_process(data)
+{
+    if (data.status == 1)
+    {
+        var elem = '<div class="row activity-comment-item" id="comment'+data.commentid+'">\
+                        <div class="col-lg-10">\
+                            <div class="row">';
+        if(data.is_staff)
+        {
+            elem += '<div class="col-lg-4 text-left">\
+                        <button class="btn btn-xs btn-danger" onclick="del_comment(' + data.commentid + ')">Del</button>\
+                     </div>';
+        }
+        elem += '<div class="col-lg-8 text-right pull-right">\
+                                    <p>\
+                                        <strong>\
+                                            '+data.name+'\
+                                        </strong> @ '+data.datetime+
+                                    '</p>\
+                                </div>\
+                            </div>\
+                            <div class="row activity-comment-content">\
+                                <p>' + data.content + '\
+                                </p>\
+                            </div>\
+                        </div>\
+                        <div class="col-lg-2">\
+                                    <div>Image</div>\
+                        </div>\
+                </div>';
+        $('.activity-comment-add').after(elem);
+    }
+}
