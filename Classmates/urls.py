@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url(r'^', include('mainapp.urls')),
+    url(r'^activity/', include('activity.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^m/', include('mainapp.murls')),
 

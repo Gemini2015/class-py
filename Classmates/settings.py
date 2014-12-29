@@ -178,6 +178,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_DIR, 'mainapp/templates'),
+    os.path.join(BASE_DIR, 'activity/templates'),
     #os.path.join(BASE_DIR, 'mainapp/templates/include'),
 )
 
@@ -193,6 +194,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'mainapp',
+    'activity',
 )
 
 # A sample logging configuration. The only tangible logging

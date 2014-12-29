@@ -244,6 +244,12 @@ body {
     border-radius: 6px;
 }
 
+.activity-info-status h3
+{
+    color: #0088cc;
+    margin-right: 10px;
+}
+
 .activity-info-body
 {
     margin-top: 10px;

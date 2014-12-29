@@ -11,10 +11,10 @@
                 <div class="bs-docs-sidebar">
                     <ul id="infolist" class="nav nav-list main-sidenav">
 
-                        {% for p in infolist %}
-                            <li id="{{ p.user.id }}">
+                        {% for item in activities %}
+                            <li id="{{ item.id }}">
                                 <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
+                                    <a href="/activity/{{ item.id }}">{{ item.title }} @ {{ item.datetime|date:'Y-m-d H:i' }}</a>
                                 </div>
                             </li>
                         {% endfor %}
@@ -31,10 +31,11 @@
 
             <div class="col-lg-2">
                 <div class="bs-docs-sidebar">
-
-                    <div class="row participants-list-btn-group-1">
-                        <button class="btn btn-primary">Manage</button>
-                    </div>
+                    {% if user.is_staff or activity.creator == userinfo %}
+                        <div class="row participants-list-btn-group-1">
+                            <button class="btn btn-primary">Manage</button>
+                        </div>
+                    {% endif %}
                     <div class="row participants-list-btn-group-2">
                         <button class="btn btn-primary">Join</button>
                         <button class="btn btn-primary">Quit</button>
@@ -46,7 +47,7 @@
 
                     <ul id="infolist" class="nav nav-list main-sidenav">
 
-                        {% for p in infolist %}
+                        {% for p in participants %}
                             <li id="{{ p.user.id }}">
                                 <div class="row list-item">
                                     <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
