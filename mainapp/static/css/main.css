@@ -86,11 +86,6 @@ body {
     margin-top: 70px;
     text-align: center;
 }
-.bs-docs-sidebar-btn-group-2 button
-{
-    margin: 5px;
-    width: 30%;
-}
 
 .main-sidenav {
     background-color: #fff;
@@ -302,9 +297,25 @@ body {
     -moz-border-radius: 6px;
     border-radius: 6px;
 }
+
+/*
+    Participants list
+*/
 .participants-list-header
 {
     border-bottom: 2px solid #e5e5e5;
     margin-bottom: 10px;
     font-size: 24px;
+}
+
+.participants-list-btn-group-1 button
+{
+    margin: 2%;
+    width: 66%;
+}
+
+.participants-list-btn-group-2 button
+{
+    margin: 2%;
+    width: 30%;
 }
