@@ -27,7 +27,7 @@ def activity_main_view(request):
     activity = activities[0]
     participant_id_list = UserActivity.objects.filter(item=activity.id, is_participate=True).values_list('user')
     participant_info_list = CommonInfo.objects.filter(id__in=participant_id_list)
-    comments = Comment.objects.filter(item=activity.id).order_by('datetime')
+    comments = Comment.objects.filter(item=activity.id).order_by('-datetime')
     try:
         temp = loader.get_template('activity_main.html')
     except TemplateDoesNotExist:
@@ -119,7 +119,7 @@ def activity_info_view(request, activity_id):
     participant_id_list = UserActivity.objects.filter(item=activity.id, is_participate=True).values_list('user')
     participant_info_list = CommonInfo.objects.filter(id__in=participant_id_list)
 
-    comments = Comment.objects.filter(item=activity.id).order_by('datetime')
+    comments = Comment.objects.filter(item=activity.id).order_by('-datetime')
     try:
         temp = loader.get_template('activity_main.html')
     except TemplateDoesNotExist:
@@ -226,10 +226,12 @@ def activity_post_comment_view(request):
     comment.section = 1
     comment.item = activityid
     comment.is_anonymous = False
-    datetime = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
+    current = time.localtime(time.time())
+    datetime = time.strftime('%Y-%m-%d %H:%M:%S', current)
     comment.datetime = datetime
     comment.save()
 
+    datetime = time.strftime('%Y-%m-%d %H:%M', current)
     data = {
         'name': userinfo.cname,
         'datetime': datetime,
