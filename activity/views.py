@@ -76,27 +76,44 @@ def activity_new_view(request):
 
         if title == '' or datetime == '' or location == '' or creator == 0:
             # 返回参数错误提示
-            temp = loader.get_template('runscript.html')
             alertstr = _('Parameter error')
             url = 'activity/new'
-            context = Context({
-                'alertstr': alertstr, 'url': url
-            })
-            return HttpResponse(temp.render(context))
+            return client_run_script(request, url=url, alert=alertstr)
 
         activity = Activity()
         activity.title = title
         activity.datetime = datetime
         activity.location = location
-        activity.creator = CommonInfo.objects.get(id=creator)
+        try:
+            activity.creator = CommonInfo.objects.get(id=creator)
+        except CommonInfo.DoesNotExist:
+            alert = 'User does not exist'
+            return client_run_script(request, url='activity/new', alert=alert)
+
         if organizer == 0:
             activity.organizer = None
         else:
-            activity.organizer = CommonInfo.objects.get(id=organizer)
+            try:
+                activity.organizer = CommonInfo.objects.get(id=organizer)
+            except CommonInfo.DoesNotExist:
+                alert = 'User does not exist'
+                return client_run_script(request, url='activity/new', alert=alert)
+
         activity.content = content
         # Discussing
         activity.status = 1
         activity.save()
+
+        result = join_activity(activity.creator, activity.id)
+        if result != 1:
+            alert = 'Error: Join Activity'
+            return client_run_script(request, url='activity/new', alert=alert)
+
+        if activity.organizer:
+            result = join_activity(activity.organizer, activity.id)
+            if result != 1:
+                alert = 'Error: Join Activity'
+                return client_run_script(request, url='activity/new', alert=alert)
 
         return activity_info_view(request, activity.id)
 
@@ -105,13 +122,9 @@ def activity_new_view(request):
 def activity_info_view(request, activity_id):
     activity = Activity.objects.filter(id=activity_id)
     if activity.count() == 0:
-        temp = loader.get_template('runscript.html')
         alertstr = _('Activity not exists')
         url = 'activity'
-        context = Context({
-            'alertstr': alertstr, 'url': url
-        })
-        return HttpResponse(temp.render(context))
+        return client_run_script(request, url, alertstr)
     activity = activity[0]
     user = request.user
     info = CommonInfo.objects.get(user=user)
@@ -144,16 +157,10 @@ def activity_join_view(request):
 
     activityid = request.GET.get('activityid', 0)
     userinfo = CommonInfo.objects.get(user=request.user)
-    useractivity = UserActivity.objects.filter(user=userinfo, section=1, item=activityid)
-    if useractivity.count() != 0:
-        return json_return(5)
 
-    useractivity = UserActivity()
-    useractivity.user = userinfo
-    useractivity.section = 1
-    useractivity.item = activityid
-    useractivity.is_participate = True
-    useractivity.save()
+    result = join_activity(userinfo, activityid)
+    if result != 1:
+        return json_return(result)
 
     data = {
         'id': userinfo.user.id,
@@ -302,11 +309,29 @@ def activity_del_activity_view(request):
     return json_return(code=1, data=data)
 
 
+def join_activity(user, activity):
+    if not user or not activity:
+        return 0
+
+    useractivity = UserActivity.objects.filter(user=user, section=1, item=activity)
+    if useractivity.count() != 0:
+        return 5
+
+    useractivity = UserActivity()
+    useractivity.user = user
+    useractivity.section = 1
+    useractivity.item = activity
+    useractivity.is_participate = True
+    useractivity.save()
+    return 1
+
+
 def json_return(code, data=None):
     res = HttpResponse()
     res['Content-Type'] = "text/javascript"
 
     error_dict = {
+        0: 'failure',
         1: 'success',
         2: 'invalid parameter',
         3: 'permission denied',
@@ -326,3 +351,12 @@ def json_return(code, data=None):
 
     res.write(json.JSONEncoder().encode(data))
     return res
+
+
+def client_run_script(request, url, alert=""):
+    temp = loader.get_template('runscript.html')
+    context = Context({
+        'url': url,
+        'alertstr': alert
+    })
+    return HttpResponse(temp.render(context))
