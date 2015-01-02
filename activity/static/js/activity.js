@@ -108,3 +108,58 @@ function post_comment_process(data)
         $('.activity-comment-add').after(elem);
     }
 }
+
+function change_status()
+{
+    $.getJSON(
+		'/activity/change_status',
+		{ activityid: $('#activityid').val() },
+		function(data)
+		{
+			change_status_process(data);
+		});
+}
+
+function change_status_process(data)
+{
+    if(data.status == 1)
+    {
+        if(data.activity_status == 1)
+        {
+            $('#btn_manage_activity').text('Publish');
+            $('#text_activity_status').text('Discussing');
+        }
+        else if(data.activity_status == 2)
+        {
+            $('#btn_manage_activity').text('Finish');
+            $('#text_activity_status').text('Published');
+        }
+        else
+        {
+            $('#btn_manage_activity').remove();
+            $('#text_activity_status').text('Finished');
+        }
+    }
+}
+
+function delete_activity_confirm()
+{
+    if(confirm('确定要删除该活动？'))
+    {
+        $.getJSON(
+		'/activity/del_activity',
+		{ activityid: $('#activityid').val() },
+		function(data)
+		{
+            if(data.status == 1)
+            {
+                if (!window.location.origin)
+                {
+                    window.location.origin = window.location.protocol + "//" + window.location.host;
+                }
+                var newurl = window.location.origin + '/'+ data.url;
+                window.location.assign(newurl);
+            }
+		});
+    }
+}

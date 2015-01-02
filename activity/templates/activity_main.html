@@ -16,7 +16,7 @@
                     <div class="col-lg-4 pull-right text-right activity-info-status">
                         {% for key, value in ACTIVITY_STATUS %}
                             {% if key == activity.status %}
-                                <h3>{{ value }}</h3>
+                                <h3 id="text_activity_status">{{ value }}</h3>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -63,19 +63,15 @@
                     </div>
                     <div class="col-lg-6 text-right">
                         {% if user.is_staff or activity.creator == userinfo or activity.organizer == userinfo%}
-                            {% if activity.organizer != userinfo %}
-                                <button class="btn btn-sm btn-primary">Delete</button>
+                            {% if user.is_staff or activity.creator == userinfo %}
+                                <button id="btn_delete_activity" class="btn btn-sm btn-primary" onclick="delete_activity_confirm()">Delete</button>
                             {% endif %}
                             {% if activity.status == 1 %}
-                                <button class="btn btn-sm btn-primary">Publish</button>
+                                <button id="btn_manage_activity" class="btn btn-sm btn-primary" onclick="change_status()">Publish</button>
                             {% else %}
                                 {% if activity.status == 2 %}
-                                    <button class="btn btn-sm btn-primary">Finish</button>
+                                    <button id="btn_manage_activity" class="btn btn-sm btn-primary" onclick="change_status()">Finish</button>
                                 {% endif %}
-                            {% endif %}
-                        {% else %}
-                            {% if activity.organizer == userinfo %}
-                                <button class="btn btn-sm btn-primary">Publish</button>
                             {% endif %}
                         {% endif %}
                     </div>

@@ -243,6 +243,65 @@ def activity_post_comment_view(request):
     return json_return(1, data=data)
 
 
+@login_required(login_url='/login')
+def activity_change_status_view(request):
+    if 'activityid' not in request.GET:
+        return json_return(2)
+
+    activityid = request.GET.get('activityid', 0)
+    if activityid == 0:
+        return json_return(2)
+
+    activity = Activity.objects.filter(id=activityid)
+    if activity.count() == 0:
+        return json_return(4)
+
+    activity = activity[0]
+    userinfo = CommonInfo.objects.get(user=request.user)
+    if not request.user.is_staff and activity.creator != userinfo \
+            and activity.organizer != userinfo:
+        return json_return(3)
+
+    if activity.status != 1 and activity.status != 2:
+        return json_return(6)
+
+    activity.status += 1
+    activity.save()
+
+    data = {
+        'activity_status': activity.status
+    }
+
+    return json_return(code=1, data=data)
+
+
+@login_required(login_url='/login')
+def activity_del_activity_view(request):
+    if 'activityid' not in request.GET:
+        return json_return(2)
+
+    activityid = request.GET.get('activityid', 0)
+    if activityid == 0:
+        return json_return(2)
+
+    activity = Activity.objects.filter(id=activityid)
+    if activity.count() == 0:
+        return json_return(4)
+
+    activity = activity[0]
+    userinfo = CommonInfo.objects.get(user=request.user)
+    if not request.user.is_staff and activity.creator != userinfo:
+        return json_return(3)
+
+    activity.delete()
+
+    data = {
+        'url': 'activity'
+    }
+
+    return json_return(code=1, data=data)
+
+
 def json_return(code, data=None):
     res = HttpResponse()
     res['Content-Type'] = "text/javascript"
@@ -253,6 +312,7 @@ def json_return(code, data=None):
         3: 'permission denied',
         4: 'object not exists',
         5: 'object already exists',
+        6: 'invalid operation',
     }
 
     message = error_dict[code]

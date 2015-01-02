@@ -10,6 +10,8 @@ urlpatterns = patterns('',
                        url(r'^quit$', activity_quit_view),
                        url(r'^post_comment$', activity_post_comment_view),
                        url(r'^del_comment$', activity_del_comment_view),
+                       url(r'^change_status$', activity_change_status_view),
+                       url(r'^del_activity$', activity_del_activity_view),
                        url(r'^$', activity_main_view),
                        )
 
