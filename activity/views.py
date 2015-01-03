@@ -129,7 +129,8 @@ def activity_info_view(request, activity_id):
     user = request.user
     info = CommonInfo.objects.get(user=user)
     activities = Activity.objects.all()
-    participant_id_list = UserActivity.objects.filter(item=activity.id, is_participate=True).values_list('user')
+    participant_id_list = UserActivity.objects.filter(section=1, item=activity.id, is_participate=True).values_list(
+        'user')
     participant_info_list = CommonInfo.objects.filter(id__in=participant_id_list)
 
     comments = Comment.objects.filter(item=activity.id).order_by('-datetime')
@@ -309,6 +310,49 @@ def activity_del_activity_view(request):
     return json_return(code=1, data=data)
 
 
+@login_required(login_url='/login')
+def activity_req_manage_participants(request):
+    if 'activityid' not in request.GET:
+        return json_return(2)
+
+    activityid = request.GET.get('activityid', 0)
+    if activityid == 0:
+        return json_return(2)
+
+    activity = Activity.objects.filter(id=activityid)
+    if activity.count() == 0:
+        return json_return(4)
+
+    activity = activity[0]
+    userinfo = CommonInfo.objects.get(user=request.user)
+    if not request.user.is_staff and activity.creator != userinfo \
+            and activity.organizer != userinfo:
+        return json_return(3)
+
+    try:
+        temp = loader.get_template("mod/dlg_manage.html")
+    except TemplateDoesNotExist:
+        return json_return(7)
+
+    join_id_list = UserActivity.objects.filter(section=1,
+                                                      item=activity.id,
+                                                      is_participate=True).values_list('user')
+    join_list = CommonInfo.objects.filter(id__in=join_id_list)
+    unjoin_list = CommonInfo.objects.exclude(id__in=join_id_list)
+    context = Context({
+        'join_list': join_list,
+        'unjoin_list': unjoin_list,
+    })
+
+    content = temp.render(context)
+
+    data = {
+        'content': content,
+    }
+
+    return json_return(code=1, data=data)
+
+
 def join_activity(user, activity):
     if not user or not activity:
         return 0
@@ -338,6 +382,7 @@ def json_return(code, data=None):
         4: 'object not exists',
         5: 'object already exists',
         6: 'invalid operation',
+        7: 'template does not exist',
     }
 
     message = error_dict[code]

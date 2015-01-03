@@ -163,3 +163,23 @@ function delete_activity_confirm()
 		});
     }
 }
+
+function request_manage_participants()
+{
+     $.getJSON(
+		'/activity/req_manage_participants',
+		{ activityid: $('#activityid').val() },
+		function(data)
+		{
+            manage_participants(data)
+		});
+}
+
+function manage_participants(data)
+{
+    if(data.status == 1)
+    {
+        $('.footer').after(data.content);
+        $('#myModal').modal();
+    }
+}

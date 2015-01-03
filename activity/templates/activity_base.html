@@ -33,7 +33,7 @@
                 <div class="bs-docs-sidebar">
                     {% if user.is_staff or activity.creator == userinfo %}
                         <div class="row participants-list-btn-group-1">
-                            <button id="btn-manage" class="btn btn-primary">Manage</button>
+                            <button id="btn-manage" class="btn btn-primary" onclick="request_manage_participants()">Manage</button>
                         </div>
                     {% endif %}
                     <div class="row participants-list-btn-group-2">
