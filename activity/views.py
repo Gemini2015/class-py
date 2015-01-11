@@ -4,6 +4,7 @@ from django.template import loader, Context, TemplateDoesNotExist
 from django.shortcuts import render, render_to_response, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.contrib.auth.models import User
 from mainapp.models import CommonInfo
 from django.utils.translation import ugettext as _
@@ -350,6 +351,55 @@ def activity_req_manage_participants(request):
         'content': content,
     }
 
+    return json_return(code=1, data=data)
+
+
+@login_required(login_url='/login')
+def activity_manage_participants(request):
+    if 'activityid' not in request.GET:
+        return json_return(2)
+
+    if 'plist[]' not in request.GET:
+        return json_return(2)
+
+    activityid = request.GET.get('activityid', 0)
+    if activityid == 0:
+        return json_return(2)
+
+    activity = Activity.objects.filter(id=activityid)
+    if activity.count() == 0:
+        return json_return(4)
+
+    activity = activity[0]
+    userinfo = CommonInfo.objects.get(user=request.user)
+    if not request.user.is_staff and activity.creator != userinfo \
+            and activity.organizer != userinfo:
+        return json_return(3)
+
+    plist = request.GET.getlist('plist[]', None)
+    if len(plist) == 0:
+        return json_return(1)
+
+    plistinfo = CommonInfo.objects.filter(id__in=plist)
+    participants = UserActivity.objects.filter(section=1,
+                                               item=activity.id,
+                                               is_participate=True)
+    # delete person
+    remove = participants.exclude(user__in=plistinfo)
+    for i in remove:
+        i.delete()
+    # add person
+    participantsuser = participants.values('user')
+    addperson = plistinfo.exclude(id__in=participantsuser)
+    for i in addperson:
+        ret = join_activity(i, activity.id)
+        if ret != 1:
+            return json_return(ret)
+
+    plistinfo = serializers.serialize('json', plistinfo)
+    data = {
+        'plistinfo': plistinfo
+    }
     return json_return(code=1, data=data)
 
 

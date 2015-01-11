@@ -13,6 +13,7 @@ urlpatterns = patterns('',
                        url(r'^change_status$', activity_change_status_view),
                        url(r'^del_activity$', activity_del_activity_view),
                        url(r'^req_manage_participants$', activity_req_manage_participants),
+                       url(r'^manage_participants$', activity_manage_participants),
                        url(r'^$', activity_main_view),
                        )
 

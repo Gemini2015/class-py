@@ -180,6 +180,94 @@ function manage_participants(data)
     if(data.status == 1)
     {
         $('.footer').after(data.content);
-        $('#myModal').modal();
+        $('#myModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+}
+
+function add_participants()
+{
+	$('#unjoin option:selected').each(function(index, elem)
+	{
+        elem = $(elem);
+        elem.appendTo($('#joined'));
+        //elem.remove();
+    });
+}
+
+function add_all_participants()
+{
+	$('#unjoin option').each(function(index, elem)
+	{
+		elem = $(elem);
+		elem.appendTo($('#joined'));
+		//elem.remove();
+	});
+}
+
+function del_participants()
+{
+	$('#joined option:selected').each(function(index, elem)
+	{
+		elem = $(elem);
+		elem.appendTo($('#unjoin'));
+		//elem.remove();
+	});
+}
+
+function del_all_participants()
+{
+	$('#joined option').each(function(index, elem)
+	{
+		elem = $(elem);
+		elem.appendTo($('#unjoin'));
+		//elem.remove();
+	});
+}
+
+function clean_dlg()
+{
+    $('#myModal').modal('hide');
+	$('#myModal').remove();
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+}
+
+function submit_participants()
+{
+	var plist = [];
+	$('#joined option').each(function(index, elem)
+	{
+		plist.push($(elem).val());
+	});
+
+	$.getJSON(
+		'/activity/manage_participants',
+		{ activityid: $('#activityid').val(),
+		  plist: plist
+		},
+		function(data)
+		{
+            refersh_participants(data);
+		});
+}
+
+function refersh_participants(data)
+{
+    if(data.status == 1)
+    {
+        $('#participants-list').empty();
+        var infolist = eval(data.plistinfo);
+        $.each(infolist, function(index, item){
+            var list_item = '<li id="participants' + item.pk + '"> \
+                            <div class="row list-item">\
+                                <a href="/info/' + item.pk + '">' + item.fields.cname + '</a>\
+                            </div>\
+                         </li>';
+            $('#participants-list').append(list_item);
+        });
+        clean_dlg();
     }
 }
