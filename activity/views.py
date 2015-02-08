@@ -21,7 +21,7 @@ def activity_main_view(request):
 
     # 判断是否存在活动
     if 0 == Activity.objects.count():
-        activity_new_view(request)
+        return activity_new_view(request)
 
     # 存在活动
     activities = Activity.objects.all()
