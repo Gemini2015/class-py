@@ -183,3 +183,145 @@ body {
 {
      text-align: right;
 }
+
+/*-------------------------------------------------------*/
+/*
+        Activity CSS
+*/
+.text-left
+{
+    text-align: left;
+}
+
+.text-right
+{
+    text-align: right;
+}
+
+/*
+    Activity form plane
+*/
+
+.activity-form
+{
+    margin-top: 50px;
+
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    padding: 20px 0px 0px 0px;
+}
+
+/*
+
+    Activity info plane
+
+*/
+
+.activity-info
+{
+    margin-top: 50px;
+
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    padding: 0px 0px 20px 0px;
+}
+
+.activity-info-title
+{
+    margin-top: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+
+
+    border-bottom: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.activity-info-status h3
+{
+    color: #0088cc;
+    margin-right: 10px;
+}
+
+.activity-info-body
+{
+    margin-top: 10px;
+    padding: 5px 15px;
+}
+
+.activity-info-body p
+{
+    font-size: 20px;
+}
+
+.activity-info-body-desc
+{
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+/*
+    Activity comment
+*/
+
+.activity-comment
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.activity-comment-add
+{
+    margin-top: 10px;
+    padding: 10px 0px;
+
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.activity-comment-item,
+.activity-comment-content
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+/*
+    Participants list
+*/
+.participants-list-header
+{
+    border-bottom: 2px solid #e5e5e5;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.participants-list-btn-group-1 button
+{
+    margin: 2%;
+    width: 66%;
+}
+
+.participants-list-btn-group-2 button
+{
+    margin: 2%;
+    width: 30%;
+}
