@@ -12,11 +12,8 @@ function join_activity()
 function join_process(data)
 {
     if (data.status == 1) {
-        var list_item = '<li id="participants' + data.id + '"> \
-                            <div class="row list-item">\
-                                <a href="/info/' + data.id + '">' + data.name + '</a>\
-                            </div>\
-                         </li>';
+        var list_item = '<a href="/info/' + data.id +
+            '" class="list-group-item" data-id="'+ data.id +'">' + data.name + '</a>';
         $('#participants-list').prepend(list_item);
     }
 }
@@ -35,7 +32,7 @@ function quit_activity()
 function quit_process(data)
 {
     if (data.status == 1) {
-        $('#participants-list').children('#participants' + data.id).remove();
+        $('#participants-list').children("[data-id='" + data.id + "']").remove();
     }
 
 }
@@ -261,11 +258,8 @@ function refersh_participants(data)
         $('#participants-list').empty();
         var infolist = eval(data.plistinfo);
         $.each(infolist, function(index, item){
-            var list_item = '<li id="participants' + item.pk + '"> \
-                            <div class="row list-item">\
-                                <a href="/info/' + item.pk + '">' + item.fields.cname + '</a>\
-                            </div>\
-                         </li>';
+            var list_item = '<a href="/info/' + item.pk +
+                '" class="list-group-item" data-id="' + item.pk +'">' + item.fields.cname + '</a>';
             $('#participants-list').append(list_item);
         });
         clean_dlg();

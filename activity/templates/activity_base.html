@@ -9,16 +9,10 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="bs-docs-sidebar">
-                    <ul id="infolist" class="nav nav-list main-sidenav">
-
+                    <ul id="infolist" class="list-group">
                         {% for item in activities %}
-                            <li id="{{ item.id }}">
-                                <div class="row list-item">
-                                    <a href="/activity/{{ item.id }}">{{ item.title }} @ {{ item.datetime|date:'Y-m-d H:i' }}</a>
-                                </div>
-                            </li>
+                            <a href="/activity/{{ item.id }}" class="list-group-item">{{ item.title }} @ {{ item.datetime|date:'Y-m-d H:i' }}</a>
                         {% endfor %}
-
                     </ul>
                 </div>
             </div>
@@ -45,16 +39,10 @@
                         <label>Participants</label>
                     </div>
 
-                    <ul id="participants-list" class="nav nav-list main-sidenav">
-
+                    <ul id="participants-list" class="list-group">
                         {% for p in participants %}
-                            <li id="participants{{ p.user.id }}">
-                                <div class="row list-item">
-                                    <a href="/info/{{ p.user.id }}">{{ p.cname }}</a>
-                                </div>
-                            </li>
+                            <a href="/info/{{ p.user.id }}" class="list-group-item" data-id="{{ p.user.id }}">{{ p.cname }}</a>
                         {% endfor %}
-
                     </ul>
                 </div>
             </div>
